@@ -69,49 +69,14 @@ window.onclick = function (event) {
 }
 /* Full Page Tabs */
 
-
-// Typewriter script
-i = 0;
-txt = 'Herzlich willkommen! Ick bin Icc. Das bedeutet: I can calculate!!! Wir trainieren hier das schnelle Kopfrechnen. Klick mich und es geht los. Klick den Stempel und ich sage dir, ob du richtig gerechnet hast!';
-speed = 5;
-
-function typeWriter() {
-    if (i < txt.length) {
-        document.getElementById("Willkommenstext").innerHTML += txt.charAt(i);
-        if ($("#sound").is(":checked")) {
-            document.getElementById('audiofile').play();
-        }
-        i++;
-        setTimeout(typeWriter, speed);
-    }
-}
-
-// Typewriter script
-
-function schreibe(inhalt) {
-    var i = 0;
-    var txt = inhalt;
-    var speed = 5;
-
-    function typeWriter() {
-        if (i < txt.length) {
-            document.getElementById("Willkommenstext").innerHTML += txt.charAt(i);
-            if ($("#sound").is(":checked")) {
-                document.getElementById('audiofile').play();
-            }
-            i++;
-            setTimeout(typeWriter, speed);
-        }
-    }
-
-    //setTimeout(typeWriter, speed);
-}
+var typeWriter = new TypeWriter();
 
 
 $('#start').click(function () {
     $("#start").remove();
-    typeWriter();
-    //schreibe('Herzlich willkommen! Ick bin Icc. Das bedeutet: I can calculate!!! Wir trainieren hier das schnelle Kopfrechnen. Klick mich und es geht los. Klick den Stempel und ich sage dir, ob du richtig gerechnet hast!');
+    typeWriter.element = document.getElementById("Willkommenstext");
+    typeWriter.text = 'Herzlich willkommen! Ick bin Icc. Das bedeutet: I can calculate!!! Wir trainieren hier das schnelle Kopfrechnen. Klick mich und es geht los. Klick den Stempel und ich sage dir, ob du richtig gerechnet hast!';
+    typeWriter.type();
 });
 
 $('#results').click(function () {
@@ -133,40 +98,13 @@ $('#results').click(function () {
     $("#Willkommenstext").css("color", "black");
     $("#Willkommenstext").css("font-size", "18px");
     $("#Willkommenstext").empty();
-    i = 0;
-    txt = 'Nächste Runde! Klick mich und es geht von vorne los. Vielleicht willst du ja auch die Einstellungen (Aufgabenart, Zeitvorgabe, Anzahl der Aufgaben ändern? Schau doch mal im Menu über mir nach!';
-    speed = 5;
-    typeWriter();
+
+    typeWriter.element = document.getElementById("Willkommenstext");
+    typeWriter.text = 'Nächste Runde! Klick mich und es geht von vorne los. Vielleicht willst du ja auch die Einstellungen (Aufgabenart, Zeitvorgabe, Anzahl der Aufgaben ändern? Schau doch mal im Menu über mir nach!';
+    typeWriter.type();
 });
 
-/*	function Countdown(options) {
-	  var timer,
-	  instance = this,
-	  seconds = options.seconds || 10,
-	  updateStatus = options.onUpdateStatus || function () {},
-	  counterEnd = options.onCounterEnd || function () {};
 
-	  function decrementCounter() {
-		updateStatus(seconds);
-		if (seconds === 0) {
-		  counterEnd();
-		  instance.stop();
-		}
-		seconds--;
-	  }
-
-	this.start = function () {
-		clearInterval(timer);
-		timer = 0;
-		seconds = options.seconds;
-		timer = setInterval(decrementCounter, 1000);
-	  };
-
-	  this.stop = function () {
-		clearInterval(timer);
-	  };
-	}
-*/
 function Zeit_animieren(t) {
     $("#bar-timeleft").css("backgroundColor", "green");
     $("#bar-timeleft").css("height", "300");
@@ -698,12 +636,13 @@ function Auswertung() {
         }, 500);
         $("#Willkommenstext").css("color", "green");
         $("#Willkommenstext").empty();
-        i = -3;
-        speed = 5;
-        txt = "Ja! Ja! Ja! Ja! Das ist genau richtig! Super!!!!! Das ist ja sensationell!!! " + Text_Aufgabe + " = " + Ergebnis;
-        txt = txt.replace("/", ":");
-        txt = txt.replace("*", "x");
-        typeWriter();
+        typeWriter.textposition = -3;
+
+        typeWriter.text = "Ja! Ja! Ja! Ja! Das ist genau richtig! Super!!!!! Das ist ja sensationell!!! " + Text_Aufgabe + " = " + Ergebnis;
+        typeWriter.text = typeWriter.text.replace("/", ":");
+        typeWriter.text = typeWriter.texttxt.replace("*", "x");
+        typeWriter.type();
+
         Balken_aktualisieren("green");
     } else {
         $("#icc").attr("src", "pic/icc_traurig.png");
@@ -726,17 +665,13 @@ function Auswertung() {
         }, 4000);
         $("#Willkommenstext").css("color", "red");
         $("#Willkommenstext").empty();
-        //var Antwort = 'Nein! Nein!! Nein!!! Nein!!!! Das ist leider falsch!!!!! Hier ist die Berichtigung: " + Text_Aufgabe + " = " + Ergebnis'
-        //schreibe(Antwort);
-        //schreibe(Text_Aufgabe);
-        //schreibe(' = ');
-        //schreibe(Ergebnis);
-        i = -3;
-        speed = 10;
-        txt = "Nein! Nein!! Nein!!! Nein!!!! Das ist leider falsch!!!!! Hier ist die Berichtigung: " + Text_Aufgabe + " = " + Ergebnis;
-        txt = txt.replace("/", ":");
-        txt = txt.replace("*", "x");
-        typeWriter();
+
+        typeWriter.textposition = -3;
+        typeWriter.speed = 10;
+        typeWriter.text = "Nein! Nein!! Nein!!! Nein!!!! Das ist leider falsch!!!!! Hier ist die Berichtigung: " + Text_Aufgabe + " = " + Ergebnis;
+        typeWriter.text = typeWriter.text.replace("/", ":");
+        typeWriter.text = typeWriter.text.replace("*", "x");
+        typeWriter.type();
         Balken_aktualisieren("red");
     }
     ;
@@ -889,9 +824,7 @@ $(document).ready(function () {
             } else {
                 $("#z1-0").hide();
             }
-            ;
         }
-        ;
         if (zuratendeZahl == 2) {
             if ($("#z2-0").is(':hidden')) {				//if (vorzeichen=="-"){
                 $("#z2-0").show();
@@ -900,18 +833,14 @@ $(document).ready(function () {
                 $("#z2-0").hide();
                 klammer.animate({width: '0px'}, "fast");
             }
-            ;
         }
-        ;
         if (zuratendeZahl == 3) {
             if ($("#z3-0").is(':hidden')) {				//if (vorzeichen=="-"){
                 $("#z3-0").show();
             } else {
                 $("#z3-0").hide();
             }
-            ;
         }
-        ;
     });
 });
 
@@ -920,26 +849,18 @@ $(document).ready(function () {
         if (!this.checked) {
             $('#maldurch').attr('checked', !this.checked);				//FUNKTIONIERT NICHT!!!
         }
-        ;
     });
     $("#maldurch").change(function () {
         if (!this.checked) {
             $('#plusminus').attr('checked', !this.checked);
         }
-        ;
     });
 });
 
-//$(document).ready(function(){
 $("#icc").click(function () {
     Aufgabe_ausgeben();
-    //$( "#Menu_oeffnen").hide();											//NUR beim ersten Mal...
     $("#icc").unbind("click");
-    //$( "#Menu_oeffnen").unbind( "click" );							//FUNKTIONIERT NICHT!!!
-    //Rundestarten();
 });
-
-//});
 
 function Icc_animieren() {
     var img = $("#icc");
@@ -948,5 +869,5 @@ function Icc_animieren() {
         img.animate({top: '+=40px', height: '80px'}, "fast");
         img.animate({top: '-=40px', height: '120px'}, "fast");
     }
-};
+}
 
