@@ -2,8 +2,9 @@
 
 /* Style tab links */
 .tablink {
-    font-family: 'SG_0'; font-weight: bold;
-	background-color: #555;
+    font-family: 'SG_0';
+    font-weight: bold;
+    background-color: #555;
     color: white;
     float: left;
     border: none;
@@ -27,13 +28,23 @@
     height: 100%;
 }
 
-#Home {background-color: #777;}
-#News {background-color: #777;}
-#Contact {background-color: #777;}
-#About {background-color: #777;}
+#Home {
+    background-color: #777;
+}
+
+#News {
+    background-color: #777;
+}
+
+#Contact {
+    background-color: #777;
+}
+
+#About {
+    background-color: #777;
+}
 
 /* Full Page Tabs */
-
 
 /* The Modal (background) */
 .modal {
@@ -46,8 +57,8 @@
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
 
 /* Modal Content */
@@ -57,8 +68,8 @@
     margin: auto;
     padding: 0;
     border: 1px solid #888;
-    width: 95%;			
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    width: 95%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
@@ -67,13 +78,25 @@
 
 /* Add Animation */
 @-webkit-keyframes animatetop {
-    from {top:-300px; opacity:0} 
-    to {top:0; opacity:1}
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
 }
 
 @keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
 }
 
 /* The Close Button */
@@ -97,7 +120,9 @@
     color: white;
 }
 
-.modal-body {padding: 2px 16px;}
+.modal-body {
+    padding: 2px 16px;
+}
 
 .modal-footer {
     padding: 2px 16px;
@@ -107,138 +132,138 @@
 
 /* Customize the label (the container) */
 .container2 {
-  display: block;
-  position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  font-size: 18px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 /* Hide the browser's default checkbox */
 .container2 input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
 }
 
 /* Create a custom checkbox */
 .checkmark2 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
 }
 
 /* On mouse-over, add a grey background color */
 .container2:hover input ~ .checkmark2 {
-  background-color: #ccc;
+    background-color: #ccc;
 }
 
 /* When the checkbox is checked, add a blue background   #2196F3*/
 .container2 input:checked ~ .checkmark2 {
-  background-color: #4CAF50;
+    background-color: #4CAF50;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark2:after {
-  content: "";
-  position: absolute;
-  display: none;
+    content: "";
+    position: absolute;
+    display: none;
 }
 
 /* Show the checkmark when checked */
 .container2 input:checked ~ .checkmark2:after {
-  display: block;
+    display: block;
 }
 
 /* Style the checkmark/indicator */
 .container2 .checkmark2:after {
-  left: 9px;
-  top: 5px;
-  width: 5px;
-  height: 10px;
-  border: solid white;
-  border-width: 0 3px 3px 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
 }
 
 /* Customize the label (the container) */
 .container1 {
-  display: block;
-  position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  font-size: 18px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 /* Hide the browser's default radio button */
 .container1 input {
-  position: absolute;
-  opacity: 0;
+    position: absolute;
+    opacity: 0;
 }
 
 /* Create a custom radio button */
 .checkmark1 {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 25px;
-  width: 25px;
-  background-color: #eee;
-  border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border-radius: 50%;
 }
 
 /* On mouse-over, add a grey background color */
 .container1:hover input ~ .checkmark1 {
-  background-color: #ccc;
+    background-color: #ccc;
 }
 
 /* When the radio button is checked, add a blue background */
 .container1 input:checked ~ .checkmark1 {
-  background-color: #4CAF50;
+    background-color: #4CAF50;
 }
 
 /* Create the indicator (the dot/circle - hidden when not checked) */
 .checkmark1:after {
-  content: "";
-  position: absolute;
-  display: none;
+    content: "";
+    position: absolute;
+    display: none;
 }
 
 /* Show the indicator (dot/circle) when checked */
 .container1 input:checked ~ .checkmark1:after {
-  display: block;
+    display: block;
 }
 
 /* Style the indicator (dot/circle) */
 .container1 .checkmark1:after {
-  top: 9px;
-  left: 9px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: white;
+    top: 9px;
+    left: 9px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
 }
 
 .slider {
     -webkit-appearance: none;
     width: 100%;
     height: 15px;
-    border-radius: 5px;   
+    border-radius: 5px;
     background: #d3d3d3;
     outline: none;
     opacity: 0.7;
@@ -251,7 +276,7 @@
     appearance: none;
     width: 25px;
     height: 25px;
-    border-radius: 50%; 
+    border-radius: 50%;
     background: #4CAF50;
     cursor: pointer;
 }
@@ -270,108 +295,146 @@
 }
 
 body {
-    font-family: 'SG_0'; font-size: 15px; font-weight: bold; 			<!--	Baumans	-->
+    font-family: 'SG_0';
+    font-size: 15px;
+    font-weight: bold;
+<!-- Baumans -->
 }
-  .auswahl {
-    float: left; position: relative; background: #EEEEEE; height:60px; width: 60px; border-radius: 5px; 
-	margin: 10px; padding: 10 px; font-size: 15px; box-shadow: 5px 5px 5px grey;
-  }
-  .auswahl:active { 
+
+#numberpad {
+    width: 240px;
+    height: 400px;
+    text-align: center;
+    position: relative;
+    top: -420px;
+    left: -50px;
+    margin: 30px auto;
+}
+
+.btn-calc {
+    float: left;
+    position: relative;
+    background: #EEEEEE;
+    height: 60px;
+    width: 60px;
+    border-radius: 5px;
+    margin: 10px;
+    font-size: 15px;
+    box-shadow: 5px 5px 5px grey;
+}
+
+.btn-calc:active {
     transform: translateY(4px) translateX(4px);
-}  
-  .display {
-    float: left; position: relative; background: #FFFFFF; height:40px; width: 21px; border-radius: 5px; 
-	margin: 1px; padding: 1px; font-size: 15px; left: 30px; top: -15px;
-  }
-  
- #Statusfenster {
-	width: 400px; height: 220px; 
-	margin: 1px auto; 
-	text-align: center; 
-	position:relative; 
-	top: 0px; } 
- 
- #SF {
-	 background: #FFFFFF; 
-	 border-top-left-radius: 	40px 20px;
-	 border-top-right-radius: 	40px 20px;
-	 border-bottom-left-radius: 20px 40px;
-	 border-bottom-right-radius:20px 40px; 
-	 width: 400px; height: 160px; 
-	 position:relative; padding: 10px;
-	 top: -20px; left: -15px;
-	 border: 2px solid #000000; 
-	 margin: 30px auto; 
-	 text-align: left; 
-	 box-shadow: 5px 5px 5px grey; 
- } 
- 
- #Rahmen_Aufgabe {
-	 border-top-left-radius: 	40px 20px;
-	 border-top-right-radius: 	40px 20px;
-	 border-bottom-left-radius: 20px 40px;
-	 border-bottom-right-radius:20px 40px;
-	 font-size: 20px; 
-	 background: #FFFFFF;
-	 width: 400px; 
-	 height: 80px; 
-	 position:relative; 
-	 top: -70px;
-	 border: 15px solid #000000; 
-	 margin: 30px auto; 
-	 text-align: center; 
-	 box-shadow: inset 15px 10px 10px grey;
- } 
- 
- #Fenster_Aufgabe {
-	width: 400px; height: 50px; 
-	position:relative; top: 40px; 
-	margin-left: auto; margin-right: auto; 
- }
+}
 
- #Startfenster {
-	position:absolute; 
-	left: 50%; 
-	width: 400px; 
-	margin-left: -200px; 
-	height: 640px; 
-	text-align: center;
-	font-size: 16px; 
-	background: #EEEEEE; 
-	z-index: 10; 
-	opacity: 1; 
-	border-radius: 10px;
-	border: 2px solid #000000; 
-	box-shadow: 10px 10px 10px grey; 
- }
+.digit {
+    float: left;
+    position: relative;
+    background: #FFFFFF;
+    height: 40px;
+    width: 21px;
+    border-radius: 5px;
+    margin: 1px;
+    padding: 1px;
+    font-size: 15px;
+    left: 30px;
+    top: -15px;
+}
 
- #Auswertungsfenster {
-	visibility: hidden;
-	position:absolute; 
-	left: 50%; 
-	width: 400px; 
-	margin-left: -200px; 
-	height: 640px; 
-	text-align: center;
-	font-size: 16px; 
-	background: #EEEEEE; 
-	z-index: 10; 
-	opacity: 1; 
-	border-radius: 10px;
-	border: 2px solid #000000; 
-	box-shadow: 10px 10px 10px grey; 
- }
+#status {
+    width: 400px;
+    height: 220px;
+    margin: 1px auto;
+    text-align: center;
+    position: relative;
+    top: 0px;
+}
 
+#SF {
+    background: #FFFFFF;
+    border-top-left-radius: 40px 20px;
+    border-top-right-radius: 40px 20px;
+    border-bottom-left-radius: 20px 40px;
+    border-bottom-right-radius: 20px 40px;
+    width: 400px;
+    height: 160px;
+    position: relative;
+    padding: 10px;
+    top: -20px;
+    left: -15px;
+    border: 2px solid #000000;
+    margin: 30px auto;
+    text-align: left;
+    box-shadow: 5px 5px 5px grey;
+}
 
+#problem-display-frame {
+    border-top-left-radius: 40px 20px;
+    border-top-right-radius: 40px 20px;
+    border-bottom-left-radius: 20px 40px;
+    border-bottom-right-radius: 20px 40px;
+    font-size: 20px;
+    background: #FFFFFF;
+    width: 400px;
+    height: 80px;
+    position: relative;
+    top: -70px;
+    border: 15px solid #000000;
+    margin: 30px auto;
+    text-align: center;
+    box-shadow: inset 15px 10px 10px grey;
+}
 
-  .Loesung {
-    height:50px;
-	position:absolute;
-	top:20px;
-	text-align: center; 
-	opacity: 0; 
-	background: #EEEEEE; 
-	border-radius: 10px;
-	z-index:1;
-	font-size:45px; 
-  }
+#problem-display {
+    width: 400px;
+    height: 50px;
+    position: relative;
+    top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#start {
+    position: absolute;
+    left: 50%;
+    width: 400px;
+    margin-left: -200px;
+    height: 640px;
+    text-align: center;
+    font-size: 16px;
+    background: #EEEEEE;
+    z-index: 10;
+    opacity: 1;
+    border-radius: 10px;
+    border: 2px solid #000000;
+    box-shadow: 10px 10px 10px grey;
+}
+
+#results {
+    visibility: hidden;
+    position: absolute;
+    left: 50%;
+    width: 400px;
+    margin-left: -200px;
+    height: 640px;
+    text-align: center;
+    font-size: 16px;
+    background: #EEEEEE;
+    z-index: 10;
+    opacity: 1;
+    border-radius: 10px;
+    border: 2px solid #000000;
+    box-shadow: 10px 10px 10px grey;
+}
+
+.solution {
+    height: 50px;
+    position: absolute;
+    top: 20px;
+    text-align: center;
+    opacity: 0;
+    background: #EEEEEE;
+    border-radius: 10px;
+    z-index: 1;
+    font-size: 45px;
+}

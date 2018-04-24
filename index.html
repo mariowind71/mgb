@@ -1,251 +1,256 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>ICC - I Can Calculate!</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=0.8, maximum-scale=0.8, user-scalable=0">
-	<link rel="stylesheet" href="css/icc.css">
-	<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
-	<audio id="audiofile" preload="auto"><source src="sound/typewriter-2.mp3" type="audio/mpeg" /></audio>
-	<audio id="audiofile2" preload="auto"><source src="sound/button-19.mp3" type="audio/mpeg" /></audio>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>								<!--	//ÜBERPRÜFEN OER!!!!! -->
+    <title>ICC - I Can Calculate!</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=0.8, maximum-scale=0.8, user-scalable=0">
+    <link rel="stylesheet" href="css/icc.css">
+    <audio id="audiofile" preload="auto">
+        <source src="sound/typewriter-2.mp3" type="audio/mpeg"/>
+    </audio>
+    <audio id="audiofile2" preload="auto">
+        <source src="sound/button-19.mp3" type="audio/mpeg"/>
+    </audio>
+
 </head>
 
-<body style="background:white;">			
+<body style="background:white;">
 
 <!-- The Modal -->
 <div id="myModal" class="modal">
-  <!-- Modal content -->
-  <div class="modal-content">
-    <div class="modal-header">
-      <span class="close">&times;</span>
-      <h2>Icc - I can calculate</h2>
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Icc - I can calculate</h2>
+        </div>
+        <div class="modal-body">
+            <button class="tablink" onclick="openPage('Home', this, '#777')" id="defaultOpen">Rechnen</button>
+            <button class="tablink" onclick="openPage('News', this, '#777')">Info</button>
+            <button class="tablink" onclick="openPage('Contact', this, '#777')">Kontakt</button>
+            <button class="tablink" onclick="openPage('About', this, '#777')">Hilfe</button>
+            <!--&#9881; &#8505; &#9993; -->
+            <div id="Home" class="tabcontent">
+                <h3>Aufgaben</h3>
+                <p>Welche Aufgaben möchtest du üben?</p>
+                <table width=100%>
+                    <tr>
+                        <td>
+                            <form>
+                                <label class="container1">Natürliche Zahlen
+                                    <input type="radio" id="natuerlicheZahlen" checked="checked" name="radio">
+                                    <span class="checkmark1"></span>
+                                </label>
+                                <label class="container1">Ganze Zahlen
+                                    <input type="radio" id="ganzeZahlen" name="radio">
+                                    <span class="checkmark1"></span>
+                                </label></form>
+                        </td>
+                        <td>
+                            <label class="container2">+ und -
+                                <input type="checkbox" id="plusminus">
+                                <span class="checkmark2"></span>
+                            </label>
+                            <label class="container2">&#8729; und :
+                                <input type="checkbox" id="maldurch" checked="checked">
+                                <span class="checkmark2"></span>
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+
+                <hr>
+                <div class="slidecontainer">
+                    <p>Anzahl der Aufgaben: <span id="AnzahlAufgaben"></span></p>
+                    <input type="range" min="1" max="5" value="1" class="slider" id="SL_AnzahlAufgaben">
+                </div>
+                <hr>
+                <div class="slidecontainer">
+                    <p>Zeit pro Aufgabe: <span id="ZeitproAufgabe"></span> Sekunden</p>
+                    <input type="range" min="1" max="6" value="2" class="slider" id="SL_ZeitproAufgabe">
+                </div>
+                <hr>
+                <p>Maximale Gesamtzeit: <span id="Gesamtzeit"></span> Sekunden</p>
+                <hr>
+                <form>
+                    <label class="container2">Sound: Icc tippt lautstark.
+                        <input type="checkbox" id="sound" checked="checked" name="radio">
+                        <span class="checkmark2"></span>
+                    </label>
+                </form>
+            </div>
+
+            <div id="News" class="tabcontent">
+                <h3>Über Icc</h3>
+                Dieses Projekt wird von Herrn Schmidt & Herrn Wind (Digitalbotschafter der Fritz-Reuter-Oberschule) erstellt.<br>
+                Es handelt sich hierbei um eine OER (Open Educational Ressource) unter der Lizenz CC-By SA de 3.0.<br><br>
+
+                Version 0.9
+                <ul>
+                    <li>Auswahlmenu (+/-/x/:, natürliche und/oder ganze Zahlen)
+                    <li>Addition, Subtraktion, Multiplikation, Division
+                    <li>Ganze Zahlen mit z1, z2 im Bereich [-99;99] +/-
+                    <li>Ganze Zahlen mit z1, z2 im Bereich [-10;10] x/:
+                    <li>z1, z2 und Operation per Zufallsgenerator
+                    <li>Beliebig viele Runden möglich.
+                    <li>Rückmeldung über richtig/falsch mit Berichtigung
+                    <li>Rundenanzahl festlegen (10,20,30,40,50)
+                    <li>Zeitvorgabe pro Aufgabe (5,10,15,20,25,30s)
+                    <li>Statistische Auswertung (Anzahl richtig/falsch, erreichte %-Zahl)
+                    <li>todo´s:
+                        <ul>
+                            <li>Einstellungen per Symbol sichtbar im Statusfenster
+                            <li>Schwierigkeitsgrad auswählen (Grundschule, ISS, Gymnasium)
+                            <li>Testmodus mit Notenvergabe und Zertifikat
+                            <li>"Teilen-Button" für Email, WhatsApp, etc.
+                            <li>Computergegner mit wachsendem IQ :-)
+                            <li>Mehr Animationen von Icc - wer kann helfen?
+                            <li><b>Weitere Ideen von Schülern! Lasst euch was einfallen!</b>
+                        </ul>
+                    <li>Bekannte Bugs:
+                        <ul>
+                            <li>Button für +/- bzw. x/:
+                            <li>Menubutton deaktivieren während des Rechnens
+                            <li>Doppeltipp führt auf einigen Geräten zum Zoom statt Eingabe
+                        </ul>
+                </ul>
+            </div>
+
+            <div id="Contact" class="tabcontent">
+                <h3>Kontakt</h3>
+                <p>Wenn ihr einen Bug findet oder Verbesserungsvorschläge habt oder uns sagen wollt, wie ihr diese App findet, dann wendet euch jederzeit an Herrn Schmidt oder Herrn Wind.</p>
+            </div>
+
+            <div id="About" class="tabcontent">
+                <h3>Hilfe für Icc</h3>
+                <p>Hallo! Ick bin Icc! Ich helfe dir beim Kopfrechnen!</p>
+                <p>Jeden Tag 5 oder besser 10 Minuten mit mir üben und dein Mathelehrer wird staunen!</p>
+                <p>Zuerst musst du MICH antippen, dann geht es los.</p>
+                <p>+/- steht für Vorzeichenwechsel (nur für "Ganze Zahlen" relevant).</p>
+                <p>C steht für löschen, falls du dich vertippt hast.</p>
+                <p>Es erscheint eine Aufgabe. Löse sie durch Eingabe der entsprechenden Zahl. Bestätige mit Klick auf den Zahlenstempel.</p>
+                <p>Der linke Zeitbalken zeigt die voreingestellte Zeit an. Am Ende wird ausgewertet - egal, ob du eine Zahl eingegeben hast oder nicht.</p>
+                <p>Das Ganze läuft jetzt - je nach Einstellung - ganz oft ab.</p>
+                <p>Dem linken Statistik-Balken kannst du den Gesamtfortschritt ansehen, gekennzeichnet mit richtig (grün) oder falsch (rot).</p>
+                <p>Der rechte Statistik-Balken zeigt deinen Anteil richtiger Fragen (grün) in Prozent an.</p>
+                <p>Nach Ablauf aller Aufgaben bekommst du von mir eine ausführliche Auswertung. (WIRD NOCH ERGÄNZT!)</p>
+                <p>Anschließend kannst du von vorne beginnen und evtl. die Einstellungen (Aufgabenart, Anzahl, Zeit, Sound) ändern.</p>
+                <p>VIEL SPASS MIT ICC!!!</p>
+            </div>
+
+        </div>
+        <div class="modal-footer" style="text-align: center;">
+            Icc 0.9
+        </div>
     </div>
-    <div class="modal-body">
-		<button class="tablink" onclick="openPage('Home', this, '#777')" id="defaultOpen">Rechnen</button>
-		<button class="tablink" onclick="openPage('News', this, '#777')">Info</button>
-		<button class="tablink" onclick="openPage('Contact', this, '#777')">Kontakt</button>
-		<button class="tablink" onclick="openPage('About', this, '#777')">Hilfe</button>
-																								<!--&#9881; &#8505; &#9993; -->
-		<div id="Home" class="tabcontent">
-		  <h3>Aufgaben</h3>
-      <p>Welche Aufgaben möchtest du üben?</p>
-		<table width = 100%>
-			<tr>
-				<td><form>
-					<label class="container1">Natürliche Zahlen
-					  <input type="radio" id="natuerlicheZahlen" checked="checked" name="radio">
-					  <span class="checkmark1"></span>
-					</label>
-					<label class="container1">Ganze Zahlen
-					  <input type="radio" id="ganzeZahlen" name="radio">
-					  <span class="checkmark1"></span>
-					</label> </form>
-				</td>
-				<td>
-					<label class="container2">+ und -
-					  <input type="checkbox" id="plusminus">
-					  <span class="checkmark2"></span>
-					</label>
-					<label class="container2">&#8729; und :
-					  <input type="checkbox" id="maldurch" checked="checked">
-					  <span class="checkmark2"></span>
-					</label>
-				</td>
-			</tr>
-		</table>
+</div>
 
-		<hr>
-		<div class="""slidecontainer">
-			<p>Anzahl der Aufgaben: <span id="AnzahlAufgaben"></span></p>
-			<input type="range" min="1" max="5" value="1" class="slider" id="SL_AnzahlAufgaben">
-		</div>
-			<hr>
-		<div class="""slidecontainer">
-			<p>Zeit pro Aufgabe: <span id="ZeitproAufgabe"></span> Sekunden</p>
-			<input type="range" min="1" max="6" value="2" class="slider" id="SL_ZeitproAufgabe">
-		</div>
-			<hr>
-			<p>Maximale Gesamtzeit: <span id="Gesamtzeit"></span> Sekunden</p>
-		<hr>
-			<form>
-				<label class="container2">Sound: Icc tippt lautstark.
-				  <input type="checkbox" id="sound" checked="checked" name="radio">
-				  <span class="checkmark2"></span>
-				</label>
-			</form>		
-		</div>
+<div id="start">
+    <div style="height:200px;width:100px;position:relative;top:200px;left:20px"><img id="logo" src="pic/icc_start.png" height="400"/></div>
+    <div style="position:absolute;top:20px;left:100px;font-size: 100px;">Icc</div>
+    <div style="position:absolute;top:150px;left:150px">I can calculate.</div>
+    <div style="position:absolute;top:190px;left:220px">Ich kann rechnen.</div>
+    <div style="position:absolute;top:230px;left:200px">Je peux compter.</div>
+    <div style="position:absolute;top:270px;left:250px">Puedo contar.</div>
+    <div style="position:absolute;top:310px;left:200px">Eu posso contar.</div>
+    <div style="position:absolute;top:350px;left:150px">Я могу рассчитывать.</div>
+    <div style="position:absolute;top:390px;left:200px">Mogę liczyć.</div>
+    <div style="position:absolute;top:430px;left:150px">私は数えることができます。</div>
+    <div style="position:absolute;top:470px;left:200px">Tôi có thể đếm.</div>
+    <div style="position:absolute;top:510px;left:250px">Jag kan räkna.</div>
+    <div style="position:absolute;top:550px;left:200px">Güvenebilirim.</div>
+    <div style="position:absolute;top:590px;left:150px">我可以數。</div>
+</div>
 
-		<div id="News" class="tabcontent">
-		  <h3>Über Icc</h3>
-			Dieses Projekt wird von Herrn Schmidt & Herrn Wind (Digitalbotschafter der Fritz-Reuter-Oberschule) erstellt.<br>
-			Es handelt sich hierbei um eine OER (Open Educational Ressource) unter der Lizenz CC-By SA de 3.0.<br><br>
+<div id="results">
+    <div style="height:200px;width:100px;position:relative;top:200px;left:20px"><img id="Icc_Start" src="pic/icc_start.png" height="400"/></div>
+    <div style="position:absolute;top:20px;left:100px;font-size: 100px;">Icc</div>
+    <div style="position:absolute;top:150px;left:25px">Herzlichen Glückwunsch! Du bist fertig!</div>
+    <div style="font-size: 22px;position:absolute;top:300px;left:220px">Statistik</div>
+    <div id="statistics" style="position:absolute;top:330px;left:130px"></div>
+</div>
 
-			Version 0.9
-			<ul>
-				<li>Auswahlmenu (+/-/x/:, natürliche und/oder ganze Zahlen)
-				<li>Addition, Subtraktion, Multiplikation, Division
-				<li>Ganze Zahlen mit z1, z2 im Bereich [-99;99] +/-
-				<li>Ganze Zahlen mit z1, z2 im Bereich [-10;10] x/:
-				<li>z1, z2 und Operation per Zufallsgenerator
-				<li>Beliebig viele Runden möglich.
-				<li>Rückmeldung über richtig/falsch mit Berichtigung
-				<li>Rundenanzahl festlegen (10,20,30,40,50)
-				<li>Zeitvorgabe pro Aufgabe (5,10,15,20,25,30s)
-				<li>Statistische Auswertung (Anzahl richtig/falsch, erreichte %-Zahl)
-				<li>todo´s:
-				<ul>
-					<li>Einstellungen per Symbol sichtbar im Statusfenster
-					<li>Schwierigkeitsgrad auswählen (Grundschule, ISS, Gymnasium)
-					<li>Testmodus mit Notenvergabe und Zertifikat
-					<li>"Teilen-Button" für Email, WhatsApp, etc.
-					<li>Computergegner mit wachsendem IQ :-)
-					<li>Mehr Animationen von Icc - wer kann helfen?
-					<li><b>Weitere Ideen von Schülern! Lasst euch was einfallen!</b>
-				</ul>
-				<li>Bekannte Bugs:
-				<ul>
-					<li>Button für +/- bzw. x/:
-					<li>Menubutton deaktivieren während des Rechnens
-					<li>Doppeltipp führt auf einigen Geräten zum Zoom statt Eingabe
-				</ul>
-			</ul>
-		</div>
-
-		<div id="Contact" class="tabcontent">
-		  <h3>Kontakt</h3>
-		  <p>Wenn ihr einen Bug findet oder Verbesserungsvorschläge habt oder uns sagen wollt, wie ihr diese App findet, dann wendet euch jederzeit an Herrn Schmidt oder Herrn Wind.</p>
-		</div>
-
-		<div id="About" class="tabcontent">
-		  <h3>Hilfe für Icc</h3>
-		  <p>Hallo! Ick bin Icc! Ich helfe dir beim Kopfrechnen!</p>
-		  <p>Jeden Tag 5 oder besser 10 Minuten mit mir üben und dein Mathelehrer wird staunen!</p>
-		  <p>Zuerst musst du MICH antippen, dann geht es los.</p>
-		  <p>+/- steht für Vorzeichenwechsel (nur für "Ganze Zahlen" relevant).</p>
-		  <p>C steht für löschen, falls du dich vertippt hast.</p>
-		  <p>Es erscheint eine Aufgabe. Löse sie durch Eingabe der entsprechenden Zahl. Bestätige mit Klick auf den Zahlenstempel.</p>
-		  <p>Der linke Zeitbalken zeigt die voreingestellte Zeit an. Am Ende wird ausgewertet - egal, ob du eine Zahl eingegeben hast oder nicht.</p>
-		  <p>Das Ganze läuft jetzt - je nach Einstellung - ganz oft ab.</p>
-		  <p>Dem linken Statistik-Balken kannst du den Gesamtfortschritt ansehen, gekennzeichnet mit richtig (grün) oder falsch (rot).</p>
-		  <p>Der rechte Statistik-Balken zeigt deinen Anteil richtiger Fragen (grün) in Prozent an.</p>
-		  <p>Nach Ablauf aller Aufgaben bekommst du von mir eine ausführliche Auswertung. (WIRD NOCH ERGÄNZT!)</p>
-		  <p>Anschließend kannst du von vorne beginnen und evtl. die Einstellungen (Aufgabenart, Anzahl, Zeit, Sound) ändern.</p>
-		  <p>VIEL SPASS MIT ICC!!!</p>
-		</div>
-
-	</div>
-    <div class="modal-footer" style="text-align: center;">
-		Icc 0.9
+<div id="status">
+    <div id="SF">
+        <!-- Trigger/Open The Modal -->
+        <div style="height:20px;width:20px;position:absolute;top:5px;left:10px;z-index:1;font-size:25px;"><span id="Menu_oeffnen">&#9776;</span></div>
+        <div style="height:200px;width:100px;position:relative;bottom:-40px;left:-5px"><img id="icc" src="pic/icc_g.png" height="120"/></div>
+        <div style="height:225px;width:330px;position:relative;top:-215px;left:75px;font-size: 18px;"><p id="Willkommenstext"></p></div>
     </div>
-  </div>
 </div>
 
-<div id="Startfenster">
-	<div style="height:200px;width:100px;position:relative;top:200px;left:20px"><img id="Icc_Start" src="pic/icc_start.png" height="400"></img></div>
-	<div style="position:absolute;top:20px;left:100px;font-size: 100px;">Icc</div>
-	<div class="Ichkannrechnen" id="en" style="position:absolute;top:150px;left:150px">I can calculate.</div>
-	<div class="Ichkannrechnen" id="de" style="position:absolute;top:190px;left:220px">Ich kann rechnen.</div>
-	<div class="Ichkannrechnen" id="fr" style="position:absolute;top:230px;left:200px">Je peux compter.</div>
-	<div class="Ichkannrechnen" id="es" style="position:absolute;top:270px;left:250px">Puedo contar.</div>
-	<div class="Ichkannrechnen" id="pt" style="position:absolute;top:310px;left:200px">Eu posso contar.</div>
-	<div class="Ichkannrechnen" id="ru" style="position:absolute;top:350px;left:150px">Я могу рассчитывать.</div>
-	<div class="Ichkannrechnen" id="po" style="position:absolute;top:390px;left:200px">Mogę liczyć.</div>
-	<div class="Ichkannrechnen" id="jp" style="position:absolute;top:430px;left:150px">私は数えることができます。</div>
-	<div class="Ichkannrechnen" id="vi" style="position:absolute;top:470px;left:200px">Tôi có thể đếm.</div>
-	<div class="Ichkannrechnen" id="sw" style="position:absolute;top:510px;left:250px">Jag kan räkna.</div>
-	<div class="Ichkannrechnen" id="tk" style="position:absolute;top:550px;left:200px">Güvenebilirim.</div>
-	<div class="Ichkannrechnen" id="ch" style="position:absolute;top:590px;left:150px">我可以數。</div>
-</div>
+<div id="problem-display-frame">
+    <div id="problem-display">
+        <div id="Dz1-0" class="digit"><img id="z1-0" height="20" style="margin-top: 10px"/></div>
+        <div id="Dz1-1" class="digit"><img id="z1-1" height="40"/></div>
+        <div id="Dz1-2" class="digit"><img id="z1-2" height="40"/></div>
 
-<div id="Auswertungsfenster">
-	<div style="height:200px;width:100px;position:relative;top:200px;left:20px"><img id="Icc_Start" src="pic/icc_start.png" height="400"></img></div>
-	<div style="position:absolute;top:20px;left:100px;font-size: 100px;">Icc</div>
-	<div class="Ichkannrechnen" style="position:absolute;top:150px;left:25px">Herzlichen Glückwunsch! Du bist fertig!</div>
-	<div class="Ichkannrechnen" style="font-size: 22px;position:absolute;top:300px;left:220px">Statistik</div>
-	<div class="Ichkannrechnen" id="Statistik" style="position:absolute;top:330px;left:130px"></div>
-</div>
+        <div class="digit"><img id="operator" height="20" style="margin-top: 10px"/></div>
+        <div class="digit"><img id="klammer_auf" height="40"/></div>
 
-<div id="Statusfenster">
-	<div id = "SF">
-	<!-- Trigger/Open The Modal -->
-		<div style="height:20px;width:20px;position:absolute;top:5px;left:10px;z-index:1;font-size:25px;"><span id="Menu_oeffnen">&#9776;</span></div>
-		<div style="height:200px;width:100px;position:relative;bottom:-40px;left:-5px"><img id="icc" src="pic/icc_g.png" height="120"></img></div>
-		<div style="height:225px;width:330px;position:relative;top:-215px;left:75px;font-size: 18px;"><p id="Willkommenstext"></p></div>
-	</div>
-</div>
+        <div id="Dz2-0" class="digit"><img id="z2-0" height="20" style="margin-top: 10px; width: 20px;"/></div>
+        <div id="Dz2-1" class="digit"><img id="z2-1" height="40"/></div>
+        <div id="Dz2-2" class="digit"><img id="z2-2" height="40"/></div>
 
-<div onclick="starteNeueRunde();" id="Rahmen_Aufgabe";>
-	<div id="Fenster_Aufgabe">
-	  <!--<div style="border-radius: 30px;border: 1px solid #000000;">-->
-		<div id="Dz1-0" class="display"><img id="z1-0" height="20" style="margin-top: 10px"></img></div>
-		<div id="Dz1-1" class="display"><img id="z1-1" height="40"></img></div>
-		<div id="Dz1-2" class="display"><img id="z1-2" height="40"></img></div>
-	  <!--</div>-->
-		<div class="display"><img id="operator" height="20" style="margin-top: 10px"></img></div>
-		<div class="display"><img id="klammer_auf" height="40"></img></div>
-		<div id="Dz2-0" class="display"><img id="z2-0" height="20" style="margin-top: 10px; width: 20px;"></img></div>
-		<div id="Dz2-1" class="display"><img id="z2-1" height="40"></img></div>
-		<div id="Dz2-2" class="display"><img id="z2-2" height="40"></img></div>
-		<div class="display"><img id="klammer_zu" height="40"></img></div>
-		<div class="display"><img id="gl" height="40"></img></div>
-		<div id="Dz3-0" class="display"><img id="z3-0" height="20" style="margin-top: 10px"></img></div>
-		<div id="Dz3-1" class="display"><img id="z3-1" height="40"></img></div>
-		<div id="Dz3-2" class="display"><img id="z3-2" height="40"></img></div>
-		<div id="Dz3-3" class="display"><img id="z3-3" height="40"></img></div>
-	</div>
-		<!--<div style="background: white;border: 1px solid #000000;width: 300px; height: 11px;position:relative; top: -64px;left:50px;">
-			<div id="Zeitbalken2" style="background: green;height:10;width:300px;position:absolute;top:0px;left:0px;z-index:0;"><span id="Restzeit2"></span></div>
-		</div>-->
-	<div style="height:10px;width:100px;position:relative;top:22px;left:150px"><p style="color:white;font-size:10px">Icc 0.9</p></div>
+        <div class="digit"><img id="klammer_zu" height="40"/></div>
+        <div class="digit"><img id="gl" height="40"/></div>
 
-	<div class="Loesung" id="Loesung1" style="width:88px;left:20px;">-33</div>
-	<div class="Loesung" id="Loesung2" style="width:120px;left:135px;">(-55)</div>
-	<div class="Loesung" id="Loesung3" style="width:100px;left:280px;">-177</div>	
+        <div id="Dz3-0" class="digit"><img id="z3-0" height="20" style="margin-top: 10px"/></div>
+        <div id="Dz3-1" class="digit"><img id="z3-1" height="40"/></div>
+        <div id="Dz3-2" class="digit"><img id="z3-2" height="40"/></div>
+        <div id="Dz3-3" class="digit"><img id="z3-3" height="40"/></div>
+    </div>
+
+    <div style="height:10px;width:100px;position:relative;top:22px;left:150px"><p style="color:white;font-size:10px">Icc 0.9</p></div>
+
+    <div class="solution" id="solution1" style="width:88px;left:20px;">-33</div>
+    <div class="solution" id="solution2" style="width:120px;left:135px;">(-55)</div>
+    <div class="solution" id="solution3" style="width:100px;left:280px;">-177</div>
 </div>
 
 <div style="width: 300px;height: 240px;position:relative; margin-left: auto; margin-right: auto;">
-	<div style="background: white;border: 1px solid #000000;width: 20px; height: 300px;position:relative; top: -80px;left:-50px;">
-		<div id="Zeitbalken" style="background: green;height:300px;width:20px;position:absolute;top:0px;left:0px;z-index:0;"><span id="Restzeit"></span></div>
-	</div>
-	<div style="width: 240px; height: 400px; margin: 1px auto; text-align: center; position:relative; top: -420px;left:-50px;margin: 30px auto">
-		<p id="7" class="auswahl" onclick="tippeButton(this)"><img src="pic/d7.png" height="40" style="margin-top: 10px"></img></p>
-		<p id="8" class="auswahl" onclick="tippeButton(this)"><img src="pic/d8.png" height="40" style="margin-top: 10px"></img></p>
-		<p id="9" class="auswahl" onclick="tippeButton(this)"><img src="pic/d9.png" height="40" style="margin-top: 10px"></img></p>
-		<p id="4" class="auswahl" onclick="tippeButton(this)"><img src="pic/d4.png" height="40" style="margin-top: 10px"></img></p>
-		<p id="5" class="auswahl" onclick="tippeButton(this)"><img src="pic/d5.png" height="40" style="margin-top: 10px"></img></p>
-		<p id="6" class="auswahl" onclick="tippeButton(this)"><img src="pic/d6.png" height="40" style="margin-top: 10px"></img></p>
-		<p id="1" class="auswahl" onclick="tippeButton(this)"><img src="pic/d1.png" height="40" style="margin-top: 10px"></img></p>
-		<p id="2" class="auswahl" onclick="tippeButton(this)"><img src="pic/d2.png" height="40" style="margin-top: 10px"></img></p>
-		<p id="3" class="auswahl" onclick="tippeButton(this)"><img src="pic/d3.png" height="40" style="margin-top: 10px"></img></p>
-		<p id="vz" class="auswahl" onclick="tippeButton(this)"><img src="pic/plusminus.png" height="40" style="margin-top: 10px"></img></p>
-		<p id="0" class="auswahl" onclick="tippeButton(this)"><img src="pic/d0.png" height="40" style="margin-top: 10px"></img></p>
-		<p id="C" class="auswahl" onclick="tippeButton(this)"><img src="pic/dC.png" height="40" style="margin-top: 10px"></img></p>
-	</div>
-	<!--<div style="width:100px">-->
-		<div style="background: white;border: 1px solid #000000;width: 20px; height: 150px; width:40px;position:absolute; top: -80px;left:240px">
-			<div id="richtig_falsch" style="height:150px;width:40px;position:absolute;top:0px;left:0px;z-index:0;"></div>
-		</div>
-		<div style="background: white;border: 1px solid #000000;height: 150px; width:40px;position:absolute; top: -80px;left:290px">
-			<div id="richtig_Prozent" style="background: green;height:0px;width:40px;position:absolute;bottom:0px;left:0px;z-index:0;"></div>
-			<div id="falsch_Prozent" style="background: red;height:0px;width:40px;position:absolute;top:0px;left:0px;z-index:0;"></div>
-		</div>
-		<div class="auswahl" style="width: 120px; height: 120px; position:relative; top: -670px;left: 220px;">
-			<!--<p id="los" onclick="Rundestarten()" ><img src="pic/stempel.png" height="120" style="margin-top: -15px"></img></p>-->
-			<p id="los"><img src="pic/stempel.png" height="120" style="margin-top: -15px"></img></p>
-		</div>
-	<!--</div>-->
+    <div style="background: white;border: 1px solid #000000;width: 20px; height: 300px;position:relative; top: -80px;left:-50px;">
+        <div id="bar-timeleft" style="background: green;height:300px;width:20px;position:absolute;top:0px;left:0px;z-index:0;"><span id="Restzeit"></span></div>
+    </div>
+    <div id="numberpad">
+        <button id="btn-number-7"  value="7"  class="btn-calc"><img src="pic/d7.png" height="40"/></button>
+        <button id="btn-number-8"  value="8"  class="btn-calc"><img src="pic/d8.png" height="40"/></button>
+        <button id="btn-number-9"  value="9"  class="btn-calc"><img src="pic/d9.png" height="40"/></button>
+        <button id="btn-number-4"  value="4"  class="btn-calc"><img src="pic/d4.png" height="40"/></button>
+        <button id="btn-number-5"  value="5"  class="btn-calc"><img src="pic/d5.png" height="40"/></button>
+        <button id="btn-number-6"  value="6"  class="btn-calc"><img src="pic/d6.png" height="40"/></button>
+        <button id="btn-number-1"  value="1"  class="btn-calc"><img src="pic/d1.png" height="40"/></button>
+        <button id="btn-number-2"  value="2"  class="btn-calc"><img src="pic/d2.png" height="40"/></button>
+        <button id="btn-number-3"  value="3"  class="btn-calc"><img src="pic/d3.png" height="40"/></button>
+        <button id="btn-plusminus" value="+-" class="btn-calc"><img src="pic/plusminus.png" height="40"/></button>
+        <button id="btn-number-0"  value="0"  class="btn-calc"><img src="pic/d0.png" height="40"/></button>
+        <button id="btn-correct"   value="c"  class="btn-calc"><img src="pic/dC.png" height="40"/></button>
+    </div>
+
+    <div style="background: white;border: 1px solid #000000;width: 20px; height: 150px; width:40px;position:absolute; top: -80px;left:240px">
+        <div id="bar-accuracy" style="height:150px;width:40px;position:absolute;top:0px;left:0px;z-index:0;"></div>
+    </div>
+    <div style="background: white;border: 1px solid #000000;height: 150px; width:40px;position:absolute; top: -80px;left:290px">
+        <div id="percentage-right" style="background: green;height:0px;width:40px;position:absolute;bottom:0px;left:0px;z-index:0;"></div>
+        <div id="percentage-wrong" style="background: red;height:0px;width:40px;position:absolute;top:0px;left:0px;z-index:0;"></div>
+    </div>
+
+    <div style="width: 120px; height: 120px; position:relative; top: -670px;left: 220px;">
+        <button id="btn-solve" class="btn-calc"><img src="pic/stempel.png" height="120" style="margin-top: -15px"/></button>
+    </div>
+
 </div>
 
 <div style="width: 360px; height: 50px; margin: 1px auto; text-align: center; position:relative; top: 0px;margin-left: auto; margin-right: auto;">
-	<a href="https://creativecommons.org/licenses/by-sa/3.0/de/">
-	<img alt="CC-by-sa" src="pic/CC-BY-SA_icon.svg.png" title="CC-by-sa" width="100" height="35"/></a>
-	<a href="https://creativecommons.org/licenses/by-sa/3.0/de/">
-	<img alt="Deutschland" src="pic/30px-Flag_of_Germany.svg.png" title="Deutschland" width="30" height="18"/></a>
-	<span style="font-size:larger; font-weight:bold">3.0</span>
+    <a href="https://creativecommons.org/licenses/by-sa/3.0/de/">
+        <img alt="CC-by-sa" src="pic/CC-BY-SA_icon.svg.png" title="CC-by-sa" width="100" height="35"/></a>
+    <a href="https://creativecommons.org/licenses/by-sa/3.0/de/">
+        <img alt="Deutschland" src="pic/30px-Flag_of_Germany.svg.png" title="Deutschland" width="30" height="18"/></a>
+    <span style="font-size:larger; font-weight:bold">3.0</span>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>                                <!--	//ÜBERPRÜFEN OER!!!!! -->
 <script language="javascript" type="text/javascript" src="js/icc.js"></script>
 
 
