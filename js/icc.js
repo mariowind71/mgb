@@ -69,25 +69,79 @@ window.onclick = function (event) {
 }
 /* Full Page Tabs */
 
-var typeWriter = new TypeWriter();
+function Icc() {
+    this.status = new Status();
+    this.problem = new Problem();
+    this.round = null;
+    this.addEventHandlers();
+    this.init();
+}
 
+Icc.prototype.init = function() {
 
-$('#start').click(function () {
+};
+
+Icc.prototype.newRound = function() {
+    var timePerProblem = 5 * slider2.value;
+    var problemCount = 10 * slider1.value;
+    var plusminus = $("#plusminus").is(":checked");
+    var multiplydivide = $("#maldurch").is(":checked");
+    var natural = $("#ganzeZahlen").is(":checked");
+
+    this.round = new Round(timePerProblem, problemCount, plusminus, multiplydivide, natural);
+    this.showProblem();
+};
+
+Icc.prototype.addEventHandlers = function() {
+    $('#start').on("click", this.closeWelcomeScreen.bind(this));
+    $('#icc').on("click", this.newRound.bind(this));
+    $('#results').on("click", this.showResults.bind(this));
+    $("#btn-solve").on("click", this.solve.bind(this));
+
+};
+
+Icc.prototype.closeWelcomeScreen = function() {
     $("#start").remove();
-    typeWriter.element = document.getElementById("Willkommenstext");
-    typeWriter.text = 'Herzlich willkommen! Ick bin Icc. Das bedeutet: I can calculate!!! Wir trainieren hier das schnelle Kopfrechnen. Klick mich und es geht los. Klick den Stempel und ich sage dir, ob du richtig gerechnet hast!';
-    typeWriter.type();
-});
+    this.status.typeText("normal", "Herzlich willkommen! Ick bin Icc. Das bedeutet: I can calculate!!! Wir trainieren hier das schnelle Kopfrechnen. Klick mich und es geht los. Klick den Stempel und ich sage dir, ob du richtig gerechnet hast!");
+};
 
-$('#results').click(function () {
-    $("#results").css("visibility", "hidden");
-    $("#icc").bind("click", function () {
-        Aufgabe_ausgeben();
-        $("#icc").unbind("click");
+Icc.prototype.animateTime = function(milliseconds) {
+    var $bar = $("#bar-timeleft");
+    $bar.css("backgroundColor", "green");
+    $bar.css("height", "300");
+    $bar.css("top", "0");
+    $bar.animate({
+        backgroundColor: "#80ff00",
+        height: 240,
+        top: '+=60'
+    }, milliseconds).animate({
+        backgroundColor: "#ffff00",
+        height: 180,
+        top: '+=60'
+    }, milliseconds).animate({
+        backgroundColor: "#ff8000",
+        height: 120,
+        top: '+=60'
+    }, milliseconds).animate({
+        backgroundColor: "#ff0000",
+        height: 60,
+        top: '+=60'
+    }, milliseconds).animate({
+        backgroundColor: "#aa0000",
+        height: 0,
+        top: '+=60'
+    }, milliseconds, function () {
+        // Rundestarten();
     });
-    //$( "#Menu_oeffnen").bind( "click", function() {	modal.style.display = "block"; });			//unbind geht nicht ...
+};
+
+Icc.prototype.showResults = function() {
+    $("#results").css("visibility", "hidden");
+
+    Aufgabe_ausgeben();
+
     $("#Menu_oeffnen").css("opacity", "1");
-    //$( "#Menu_oeffnen").show();
+
     $("#percentage-right").css("height", "0");
     $("#percentage-wrong").css("height", "0");
     var element = document.getElementById("bar-accuracy");
@@ -95,54 +149,139 @@ $('#results').click(function () {
         element.removeChild(element.firstChild);
     }
     Variablen_initialisieren();
-    $("#Willkommenstext").css("color", "black");
-    $("#Willkommenstext").css("font-size", "18px");
-    $("#Willkommenstext").empty();
+    $("#status-text").css("color", "black");
+    $("#status-text").css("font-size", "18px");
+    $("#status-text").empty();
 
-    typeWriter.element = document.getElementById("Willkommenstext");
-    typeWriter.text = 'Nächste Runde! Klick mich und es geht von vorne los. Vielleicht willst du ja auch die Einstellungen (Aufgabenart, Zeitvorgabe, Anzahl der Aufgaben ändern? Schau doch mal im Menu über mir nach!';
-    typeWriter.type();
-});
-
-
-function Zeit_animieren(t) {
-    $("#bar-timeleft").css("backgroundColor", "green");
-    $("#bar-timeleft").css("height", "300");
-    $("#bar-timeleft").css("top", "0");
-    $("#bar-timeleft").animate({
-        backgroundColor: "#80ff00",
-        //color: "#fff",
-        height: 240,
-        top: '+=60'
-    }, t / 5);
-    $("#bar-timeleft").animate({
-        backgroundColor: "#ffff00",
-        //color: "#fff",
-        height: 180,
-        top: '+=60'
-    }, t / 5);
-    $("#bar-timeleft").animate({
-        backgroundColor: "#ff8000",
-        //color: "#fff",
-        height: 120,
-        top: '+=60'
-    }, t / 5);
-    $("#bar-timeleft").animate({
-        backgroundColor: "#ff0000",
-        //color: "#fff",
-        height: 60,
-        top: '+=60'
-    }, t / 5);
-    $("#bar-timeleft").animate({
-        backgroundColor: "#aa0000",
-        //color: "#fff",
-        height: 0,
-        top: '+=60'
-    }, t / 5, function () {
-        Rundestarten();
-    });
+    this.status.typeText("normal", "Nächste Runde! Klick mich und es geht von vorne los. Vielleicht willst du ja auch die Einstellungen (Aufgabenart, Zeitvorgabe, Anzahl der Aufgaben ändern? Schau doch mal im Menu über mir nach!");
 };
 
+Icc.prototype.solve = function () {
+    $("#bar-timeleft").stop(true);
+     Auswertung();
+    var that = this;
+
+    if (this.round.isOver()) {
+        this.showResults();
+    } else {
+        var pause = this.round.getCurrentProblem().isCorrect() ? 1500 : 5000;
+        setTimeout(function () {
+            that.showNextProblem();
+        }, pause);
+    }
+
+};
+
+Icc.prototype.showProblem = function() {
+    var problem = this.round.getCurrentProblem();
+    this.renderDisplay();
+    icc.animateTime(slider2.value * 1000);
+};
+
+Icc.prototype.showNextProblem = function() {
+    var problem = this.round.getNextProblem();
+    this.renderDisplay();
+    icc.animateTime(slider2.value * 1000);
+};
+
+Icc.prototype.renderDisplay = function() {
+
+    var currentProblem = this.round.getCurrentProblem();
+    var blankImage = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+
+    $("#z1-0").attr("src", blankImage);
+    $("#z1-1").attr("src", blankImage);
+    $("#z1-2").attr("src", blankImage);
+
+    $("#z2-0").attr("src", blankImage);
+    $("#z2-1").attr("src", blankImage);
+    $("#z2-2").attr("src", blankImage);
+
+    $("#z3-0").attr("src", blankImage);
+    $("#z3-1").attr("src", blankImage);
+    $("#z3-2").attr("src", blankImage);
+    $("#z3-3").attr("src", blankImage);
+
+    $("#operator").attr("src", {"+": "pic/plus_k.png", "-": "pic/minus_k.png", "*": "pic/mal_k.png", "/": "pic/durch_k.png"}[currentProblem.operator]);
+
+    var oneString = currentProblem.one.toString();
+    if (currentProblem.missing === 1) {
+        oneString = currentProblem.answer === null ? "" : currentProblem.answer;
+    }
+
+    switch (oneString.length) {
+        case 3:
+            $("#z1-0").attr("src", oneString.charAt(0) === "-" ? "pic/minus_k.png" : blankImage);
+            $("#z1-1").attr("src", "pic/d" + oneString.charAt(1) + ".png");
+            $("#z1-2").attr("src", "pic/d" + oneString.charAt(2) + ".png");
+            break;
+        case 2:
+            $("#z1-0").attr("src", blankImage);
+            $("#z1-1").attr("src", oneString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + oneString.charAt(0) + ".png");
+            $("#z1-2").attr("src", "pic/d" + oneString.charAt(1) + ".png");
+            break;
+        case 1:
+            $("#z1-0").attr("src", blankImage);
+            $("#z1-1").attr("src", blankImage);
+            $("#z1-2").attr("src", "pic/d" + oneString.charAt(0) + ".png");
+            break;
+    }
+
+
+    var twoString = currentProblem.two.toString();
+    if (currentProblem.missing === 2) {
+        twoString = currentProblem.answer === null ? "" : currentProblem.answer;
+    }
+
+    switch (twoString.length) {
+        case 3:
+            $("#z2-0").attr("src", twoString.charAt(0) === "-" ? "pic/minus_k.png" : blankImage);
+            $("#z2-1").attr("src", "pic/d" + twoString.charAt(1) + ".png");
+            $("#z2-2").attr("src", "pic/d" + twoString.charAt(2) + ".png");
+            break;
+        case 2:
+            $("#z2-0").attr("src", blankImage);
+            $("#z2-1").attr("src", twoString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + twoString.charAt(0) + ".png");
+            $("#z2-2").attr("src", "pic/d" + twoString.charAt(1) + ".png");
+            break;
+        case 1:
+            $("#z2-0").attr("src", blankImage);
+            $("#z2-1").attr("src", blankImage);
+            $("#z2-2").attr("src", "pic/d" + twoString.charAt(0) + ".png");
+            break;
+    }
+
+    var solutionString = currentProblem.solution.toString();
+    if (currentProblem.missing === 3) {
+        solutionString = currentProblem.answer === null ? "" : currentProblem.answer;
+    }
+
+    switch (solutionString.length) {
+
+        case 4:
+            $("#z3-0").attr("src", solutionString.charAt(0) === "-" ? "pic/minus_k.png" : blankImage);
+            $("#z3-1").attr("src", "pic/d" + solutionString.charAt(1) + ".png");
+            $("#z3-2").attr("src", "pic/d" + solutionString.charAt(2) + ".png");
+            $("#z3-3").attr("src", "pic/d" + solutionString.charAt(3) + ".png");
+            break;
+        case 3:
+            $("#z3-0").attr("src", solutionString.charAt(0) === "-" ? "pic/minus_k.png" : blankImage);
+            $("#z3-1").attr("src", "pic/d" + solutionString.charAt(1) + ".png");
+            $("#z3-2").attr("src", "pic/d" + solutionString.charAt(2) + ".png");
+            break;
+        case 2:
+            $("#z3-0").attr("src", blankImage);
+            $("#z3-1").attr("src", solutionString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + solutionString.charAt(0) + ".png");
+            $("#z3-2").attr("src", "pic/d" + solutionString.charAt(1) + ".png");
+            break;
+        case 1:
+            $("#z3-0").attr("src", blankImage);
+            $("#z3-1").attr("src", blankImage);
+            $("#z3-2").attr("src", "pic/d" + solutionString.charAt(0) + ".png");
+            break;
+    }
+
+};
 
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
@@ -156,10 +295,6 @@ function Variablen_initialisieren() {
     verbrauchteZeit = 0;
     GesamtverbrauchteZeit = 0;
     Anzahl_richtig = 0;
-    /*Balkenhoehe = 150/(10*slider1.value);
-    console.log(FragenAnzahl);
-    console.log(ZeitproFrage);
-    console.log(Balkenhoehe);*/
     Fragennummer = 0;
     richtig = false;
     Einer = 200;
@@ -197,31 +332,26 @@ function Variablen_initialisieren() {
     Ziffern[16] = "pic/gl.png";
     Ziffern[17] = "pic/mal_k.png";
     Ziffern[18] = "pic/durch_k.png";
+    Ziffern[19] = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 
 
 
-    document.getElementById('z1-0').src = Ziffern[13];
-    document.getElementById('z1-1').src = Ziffern[1];
+    document.getElementById('z1-0').src = Ziffern[19];
+    document.getElementById('z1-1').src = Ziffern[19];
     document.getElementById('z1-2').src = Ziffern[1];
     document.getElementById('operator').src = Ziffern[12];
     document.getElementById('klammer_auf').src = Ziffern[14];
-    document.getElementById('z2-0').src = Ziffern[13];
-    document.getElementById('z2-1').src = Ziffern[4];						//ANPASSEN JQUERY!!!
+    document.getElementById('z2-0').src = Ziffern[19];
+    document.getElementById('z2-1').src = Ziffern[19];						//ANPASSEN JQUERY!!!
     document.getElementById('z2-2').src = Ziffern[1];
     document.getElementById('klammer_zu').src = Ziffern[15];
     document.getElementById('gl').src = Ziffern[16];
     //document.getElementById('ziffer').src = Ziffern[11];
-    document.getElementById('z3-0').src = Ziffern[13];
-    document.getElementById('z3-1').src = Ziffern[5];
-    document.getElementById('z3-2').src = Ziffern[7];
+    document.getElementById('z3-0').src = Ziffern[19];
+    document.getElementById('z3-1').src = Ziffern[19];
+    document.getElementById('z3-2').src = Ziffern[19];
     document.getElementById('z3-3').src = Ziffern[2];
-    $("#z1-1").hide();
-    $("#z1-0").hide();
-    $("#z2-1").hide();
-    $("#z2-0").hide();
-    $("#z3-1").hide();
-    $("#z3-0").hide();
-    $("#z3-2").hide();
+
     $("#klammer_auf").hide();
     $("#klammer_zu").hide();
 }
@@ -229,12 +359,8 @@ function Variablen_initialisieren() {
 Variablen_initialisieren();
 
 function Aufgabe_ausgeben() {
-    if (Fragennummer < FragenAnzahl) {
-        Fragennummer++;
-        console.log(Fragennummer);
-        //z1 = getRandomIntInclusive(0, 10);
-        //z2 = getRandomIntInclusive(0, 10);
-        var richtig = false;
+    if (!icc.round.isOver()) {
+
         var klammer = $("#klammer_auf,#klammer_zu");
         var minus = $("#Dz2-0");														//WEITER BEARBEITEN!!!
         var minusb = $("#z2-0");
@@ -523,11 +649,9 @@ function Aufgabe_ausgeben() {
         ;
 
 
-        $("#btn-solve").bind("click", function () {
-            Rundestarten()
-        });
-        //Zeit_animieren(FragenAnzahl*1000);
-        Zeit_animieren(5 * slider2.value * 1000);
+
+
+        icc.animateTime(slider2.value * 1000);
     } else {
         Statistik_Uebersicht();
         $("#results").css("visibility", "visible");
@@ -535,27 +659,6 @@ function Aufgabe_ausgeben() {
 };
 
 
-function Rundestarten() {
-    $("#btn-solve").unbind("click");
-//		if (($("#z1-2").is(':visible')) && ($("#z2-2").is(':visible')) && ($("#z3-3").is(':visible'))&&(zuratendeZahl>0)){
-//			$("#btn-solve").bind( "click", function(){Rundestarten()} );
-//		} 	
-    $("#bar-timeleft").stop(true);
-    Auswertung();
-    var Einer = 200;
-    var Zehner = 200;			//überschreiben!!!
-    var Hunderter = 200;
-    if (richtig) {
-        setTimeout(function () {
-            Aufgabe_ausgeben();
-        }, 1500);
-    } else {
-        setTimeout(function () {
-            Aufgabe_ausgeben();
-        }, 5000);
-    }
-    ;
-}
 
 function Balken_aktualisieren(farbe) {
     var Balkenhoehe = 150 / (10 * slider1.value);
@@ -570,50 +673,9 @@ function Balken_aktualisieren(farbe) {
 }
 
 function Auswertung() {
-    $("#Willkommenstext").css("font-size", "22px");
-    if (zuratendeZahl == 1) {
-        if ($("#z1-0").is(':hidden')) {
-            errechneteZahl = errechneteZahl
-        } else {
-            errechneteZahl = -errechneteZahl
-        }
-        ;
-        if ($("#z1-2").is(':hidden')) {
-            errechneteZahl = 200;
-            vergleichszahl = z1
-        }
-    }
-    if (zuratendeZahl == 2) {
-        if ($("#z2-0").is(':hidden')) {
-            errechneteZahl = errechneteZahl
-        } else {
-            errechneteZahl = -errechneteZahl
-        }
-        ;
-        if ($("#z2-2").is(':hidden')) {
-            errechneteZahl = 200;
-            vergleichszahl = z2
-        }
-    }
-    if (zuratendeZahl == 3) {
-        if ($("#z3-0").is(':hidden')) {
-            errechneteZahl = errechneteZahl
-        } else {
-            errechneteZahl = -errechneteZahl
-        }
-        ;
-        if ($("#z3-3").is(':hidden')) {
-            errechneteZahl = 200;
-            vergleichszahl = Ergebnis
-        }
-    }
-    if (errechneteZahl == vergleichszahl) {
-        richtig = true
-    } else {
-        richtig = false
-    }
-    ;
-    Loes = "#solution" + zuratendeZahl;												//WEITER!!!
+    $("#status-text").css("font-size", "22px");
+    var currentProblem = icc.round.getCurrentProblem();
+    var richtig = currentProblem.isCorrect();
 
     verbrauchteZeit = (300 - $("#bar-timeleft").height()) / 300 * 5 * slider2.value;
     GesamtverbrauchteZeit = GesamtverbrauchteZeit + verbrauchteZeit;
@@ -622,26 +684,25 @@ function Auswertung() {
         Anzahl_richtig++;
         $("#icc").attr("src", "pic/icc.png");
         Icc_animieren();
-        $(Loes).css("background", "green");
-        $(Loes).text(vergleichszahl);
-        if (zuratendeZahl == 2) {
-            if (vergleichszahl < 0) {
-                $(Loes).text("(" + vergleichszahl + ")");
-            }
-        }
-        ;
-        $(Loes).animate({opacity: '1'}, "fast");
-        setTimeout(function () {
-            $(Loes).animate({opacity: '0'}, "fast");
-        }, 500);
-        $("#Willkommenstext").css("color", "green");
-        $("#Willkommenstext").empty();
-        typeWriter.textposition = -3;
+        // $(Loes).css("background", "green");
+        // $(Loes).text(vergleichszahl);
+        // if (zuratendeZahl == 2) {
+        //     if (vergleichszahl < 0) {
+        //         $(Loes).text("(" + vergleichszahl + ")");
+        //     }
+        // }
+        // ;
+        // $(Loes).animate({opacity: '1'}, "fast");
+        // setTimeout(function () {
+        //     $(Loes).animate({opacity: '0'}, "fast");
+        // }, 500);
+        $("#status-text").css("color", "green");
+        $("#status-text").empty();
 
-        typeWriter.text = "Ja! Ja! Ja! Ja! Das ist genau richtig! Super!!!!! Das ist ja sensationell!!! " + Text_Aufgabe + " = " + Ergebnis;
-        typeWriter.text = typeWriter.text.replace("/", ":");
-        typeWriter.text = typeWriter.texttxt.replace("*", "x");
-        typeWriter.type();
+        var text = "Ja! Ja! Ja! Ja! Das ist genau richtig! Super!!!!! Das ist ja sensationell!!! " + currentProblem.toString();
+        text = text.replace("/", ":");
+        text = text.replace("*", "x");
+        icc.status.typeText("normal", text);
 
         Balken_aktualisieren("green");
     } else {
@@ -663,15 +724,14 @@ function Auswertung() {
         setTimeout(function () {
             $(Loes).animate({opacity: '0'}, "slow");
         }, 4000);
-        $("#Willkommenstext").css("color", "red");
-        $("#Willkommenstext").empty();
+        $("#status-text").css("color", "red");
+        $("#status-text").empty();
 
-        typeWriter.textposition = -3;
-        typeWriter.speed = 10;
-        typeWriter.text = "Nein! Nein!! Nein!!! Nein!!!! Das ist leider falsch!!!!! Hier ist die Berichtigung: " + Text_Aufgabe + " = " + Ergebnis;
-        typeWriter.text = typeWriter.text.replace("/", ":");
-        typeWriter.text = typeWriter.text.replace("*", "x");
-        typeWriter.type();
+
+        var text = "Nein! Nein!! Nein!!! Nein!!!! Das ist leider falsch!!!!! Hier ist die Berichtigung: " + Text_Aufgabe + " = " + Ergebnis;
+        text = text.replace("/", ":");
+        text = text.replace("*", "x");
+        icc.status.typeText("slow", text);
         Balken_aktualisieren("red");
     }
     ;
@@ -700,113 +760,142 @@ function Statistik_Uebersicht() {
 };
 
 $("#numberpad .btn-calc").on("click", function() {
-    var gewaehlterButton = this;
+
+    var pressedButton = this;
+
     if ($("#sound").is(":checked")) {
         document.getElementById('audiofile2').play();
     }
-    var klammer = $("#klammer_auf,#klammer_zu");
-    if (zuratendeZahl == 1) {
-        vergleichszahl = z1;
-        if ((gewaehlterButton.getAttribute("value") != "btn-plusminus") && ((gewaehlterButton.getAttribute("value") != "C"))) {
-            if ($("#z1-2").is(':hidden')) {
-                document.getElementById('z1-2').src = Ziffern[gewaehlterButton.getAttribute("value")];
-                $("#z1-2").show();
-                speicher = Ziffern[gewaehlterButton.getAttribute("value")];
-                Einer = eval(gewaehlterButton.getAttribute("value"));			//var a = fruits.indexOf("Apple"); (Beispiel)
-                errechneteZahl = Einer;
-            }
-            else {
-                if ($("#z1-1").is(':hidden')) {
-                    document.getElementById('z1-1').src = speicher;
-                    $("#z1-1").show();
-                    Zehner = 10 * errechneteZahl;
-                    document.getElementById('z1-2').src = Ziffern[gewaehlterButton.getAttribute("value")];
-                    $("#z1-2").show();
-                    Einer = eval(gewaehlterButton.getAttribute("value"));
-                    errechneteZahl = eval(Zehner + Einer);
+    
+    var currentAnswer = icc.round.getCurrentProblem().answer; 
+    
+    if (isNumeric(pressedButton.value)) {
+        if (currentAnswer === null) {
+            currentAnswer = this.value;
+        } else {
+            currentAnswer += "" + this.value;
+        }
+    } else {
+        if (pressedButton.value === "c") {
+            currentAnswer = null;
+        } else if (pressedButton.value === "+-") {
+            if (currentAnswer === null) {
+                currentAnswer = "-";
+            } else {
+                if (currentAnswer.charAt(0) === "-") {
+                    currentAnswer = currentAnswer.substr(1);
                 }
             }
-        }
-        if (gewaehlterButton.getAttribute("value") == "C") {
-            Zehner = "";
-            Einer = "";
-            $("#z1-0").hide();
-            $("#z1-2").hide();
-            $("#z1-1").hide();
         }
     }
-    if (zuratendeZahl == 2) {
-        vergleichszahl = z2;
-        if ((gewaehlterButton.getAttribute("value") != "btn-plusminus") && ((gewaehlterButton.getAttribute("value") != "C"))) {
-            if ($("#z2-2").is(':hidden')) {
-                document.getElementById('z2-2').src = Ziffern[gewaehlterButton.getAttribute("value")];
-                $("#z2-2").show();
-                speicher = Ziffern[gewaehlterButton.getAttribute("value")];
-                Einer = eval(gewaehlterButton.getAttribute("value"));			//var a = fruits.indexOf("Apple"); (Beispiel)
-                errechneteZahl = Einer;
-            }
-            else {
-                if ($("#z2-1").is(':hidden')) {
-                    document.getElementById('z2-1').src = speicher;
-                    $("#z2-1").show();
-                    Zehner = 10 * errechneteZahl;
-                    document.getElementById('z2-2').src = Ziffern[gewaehlterButton.getAttribute("value")];
-                    $("#z2-2").show();
-                    Einer = eval(gewaehlterButton.getAttribute("value"));
-                    errechneteZahl = eval(Zehner + Einer);
-                }
-            }
-        }
-        if (gewaehlterButton.getAttribute("value") == "C") {
-            klammer.animate({width: '0px'}, "fast");
-            $("#z2-0").hide();
-            $("#z2-2").hide();
-            $("#z2-1").hide();
-        }
-    }
-    if (zuratendeZahl == 3) {
-        vergleichszahl = eval(Ergebnis);
-        if ((gewaehlterButton.getAttribute("value") != "btn-plusminus") && ((gewaehlterButton.getAttribute("value") != "C"))) {
-            if ($("#z3-3").is(':hidden')) {
-                document.getElementById('z3-3').src = Ziffern[gewaehlterButton.getAttribute("value")];
-                $("#z3-3").show();
-                sp3 = Ziffern[gewaehlterButton.getAttribute("value")];
-                Einer = eval(gewaehlterButton.getAttribute("value"));			//var a = fruits.indexOf("Apple"); (Beispiel)
-                Zehner = 0;
-                Hunderter = 0;
-                errechneteZahl = Einer;
-            }
-            else {
-                if ($("#z3-2").is(':hidden')) {
-                    document.getElementById('z3-2').src = sp3;
-                    $("#z3-2").show();
-                    Zehner = 10 * errechneteZahl;
-                    document.getElementById('z3-3').src = Ziffern[gewaehlterButton.getAttribute("value")];
-                    sp2 = Ziffern[gewaehlterButton.getAttribute("value")];
-                    Einer = eval(gewaehlterButton.getAttribute("value"));
-                    errechneteZahl = eval(Zehner + Einer);
-                }
-                else {
-                    if ($("#z3-1").is(':hidden')) {
-                        document.getElementById('z3-1').src = sp3;
-                        $("#z3-1").show();
-                        Hunderter = 10 * Zehner;
-                        Zehner = 10 * Einer;
-                        Einer = eval(gewaehlterButton.getAttribute("value"));
-                        document.getElementById('z3-3').src = Ziffern[gewaehlterButton.getAttribute("value")];
-                        document.getElementById('z3-2').src = sp2;
-                        errechneteZahl = eval(Hunderter + Zehner + Einer);
-                    }
-                }
-            }
-        }
-        if (gewaehlterButton.getAttribute("value") == "C") {
-            $("#z3-0").hide();
-            $("#z3-3").hide();
-            $("#z3-2").hide();
-            $("#z3-1").hide();
-        }
-    }
+
+    icc.round.getCurrentProblem().answer = currentAnswer;
+    
+    icc.renderDisplay();
+
+    // var klammer = $("#klammer_auf,#klammer_zu");
+    // if (zuratendeZahl == 1) {
+    //     vergleichszahl = z1;
+    //     if ((gewaehlterButton.getAttribute("value") != "btn-plusminus") && ((gewaehlterButton.getAttribute("value") != "C"))) {
+    //         if ($("#z1-2").is(':hidden')) {
+    //             document.getElementById('z1-2').src = Ziffern[gewaehlterButton.getAttribute("value")];
+    //             $("#z1-2").show();
+    //             speicher = Ziffern[gewaehlterButton.getAttribute("value")];
+    //             Einer = eval(gewaehlterButton.getAttribute("value"));			//var a = fruits.indexOf("Apple"); (Beispiel)
+    //             errechneteZahl = Einer;
+    //         }
+    //         else {
+    //             if ($("#z1-1").is(':hidden')) {
+    //                 document.getElementById('z1-1').src = speicher;
+    //                 $("#z1-1").show();
+    //                 Zehner = 10 * errechneteZahl;
+    //                 document.getElementById('z1-2').src = Ziffern[gewaehlterButton.getAttribute("value")];
+    //                 $("#z1-2").show();
+    //                 Einer = eval(gewaehlterButton.getAttribute("value"));
+    //                 errechneteZahl = eval(Zehner + Einer);
+    //             }
+    //         }
+    //     }
+    //     if (gewaehlterButton.getAttribute("value") == "C") {
+    //         Zehner = "";
+    //         Einer = "";
+    //         $("#z1-0").hide();
+    //         $("#z1-2").hide();
+    //         $("#z1-1").hide();
+    //     }
+    // }
+    // if (zuratendeZahl == 2) {
+    //     vergleichszahl = z2;
+    //     if ((gewaehlterButton.getAttribute("value") != "btn-plusminus") && ((gewaehlterButton.getAttribute("value") != "C"))) {
+    //         if ($("#z2-2").is(':hidden')) {
+    //             document.getElementById('z2-2').src = Ziffern[gewaehlterButton.getAttribute("value")];
+    //             $("#z2-2").show();
+    //             speicher = Ziffern[gewaehlterButton.getAttribute("value")];
+    //             Einer = eval(gewaehlterButton.getAttribute("value"));			//var a = fruits.indexOf("Apple"); (Beispiel)
+    //             errechneteZahl = Einer;
+    //         }
+    //         else {
+    //             if ($("#z2-1").is(':hidden')) {
+    //                 document.getElementById('z2-1').src = speicher;
+    //                 $("#z2-1").show();
+    //                 Zehner = 10 * errechneteZahl;
+    //                 document.getElementById('z2-2').src = Ziffern[gewaehlterButton.getAttribute("value")];
+    //                 $("#z2-2").show();
+    //                 Einer = eval(gewaehlterButton.getAttribute("value"));
+    //                 errechneteZahl = eval(Zehner + Einer);
+    //             }
+    //         }
+    //     }
+    //     if (gewaehlterButton.getAttribute("value") == "C") {
+    //         klammer.animate({width: '0px'}, "fast");
+    //         $("#z2-0").hide();
+    //         $("#z2-2").hide();
+    //         $("#z2-1").hide();
+    //     }
+    // }
+    // if (zuratendeZahl == 3) {
+    //     vergleichszahl = eval(Ergebnis);
+    //     if ((gewaehlterButton.getAttribute("value") != "btn-plusminus") && ((gewaehlterButton.getAttribute("value") != "C"))) {
+    //         if ($("#z3-3").is(':hidden')) {
+    //             document.getElementById('z3-3').src = Ziffern[gewaehlterButton.getAttribute("value")];
+    //             $("#z3-3").show();
+    //             sp3 = Ziffern[gewaehlterButton.getAttribute("value")];
+    //             Einer = eval(gewaehlterButton.getAttribute("value"));			//var a = fruits.indexOf("Apple"); (Beispiel)
+    //             Zehner = 0;
+    //             Hunderter = 0;
+    //             errechneteZahl = Einer;
+    //         }
+    //         else {
+    //             if ($("#z3-2").is(':hidden')) {
+    //                 document.getElementById('z3-2').src = sp3;
+    //                 $("#z3-2").show();
+    //                 Zehner = 10 * errechneteZahl;
+    //                 document.getElementById('z3-3').src = Ziffern[gewaehlterButton.getAttribute("value")];
+    //                 sp2 = Ziffern[gewaehlterButton.getAttribute("value")];
+    //                 Einer = eval(gewaehlterButton.getAttribute("value"));
+    //                 errechneteZahl = eval(Zehner + Einer);
+    //             }
+    //             else {
+    //                 if ($("#z3-1").is(':hidden')) {
+    //                     document.getElementById('z3-1').src = sp3;
+    //                     $("#z3-1").show();
+    //                     Hunderter = 10 * Zehner;
+    //                     Zehner = 10 * Einer;
+    //                     Einer = eval(gewaehlterButton.getAttribute("value"));
+    //                     document.getElementById('z3-3').src = Ziffern[gewaehlterButton.getAttribute("value")];
+    //                     document.getElementById('z3-2').src = sp2;
+    //                     errechneteZahl = eval(Hunderter + Zehner + Einer);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     if (gewaehlterButton.getAttribute("value") == "C") {
+    //         $("#z3-0").hide();
+    //         $("#z3-3").hide();
+    //         $("#z3-2").hide();
+    //         $("#z3-1").hide();
+    //     }
+    // }
 
 });
 
@@ -845,6 +934,7 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
+
     $("#plusminus").change(function () {
         if (!this.checked) {
             $('#maldurch').attr('checked', !this.checked);				//FUNKTIONIERT NICHT!!!
@@ -857,10 +947,10 @@ $(document).ready(function () {
     });
 });
 
-$("#icc").click(function () {
-    Aufgabe_ausgeben();
-    $("#icc").unbind("click");
-});
+// $("#icc").click(function () {
+//     Aufgabe_ausgeben();
+//     $("#icc").unbind("click");
+// });
 
 function Icc_animieren() {
     var img = $("#icc");
@@ -871,3 +961,6 @@ function Icc_animieren() {
     }
 }
 
+function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+}
