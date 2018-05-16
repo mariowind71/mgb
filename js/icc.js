@@ -283,6 +283,36 @@ Icc.prototype.renderDisplay = function() {
 
 };
 
+Icc.prototype.animateAnswer = function () {
+    var currentProblem = this.round.getCurrentProblem();
+    var missingField = $("#solution" + currentProblem.missing);
+    var fieldColor = currentProblem.isCorrect() ? "green" : "red";
+
+    $(missingField).css("background", fieldColor);
+    $(missingField).text(currentProblem.answer);
+    if (currentProblem.missing === 2) {
+        if (currentProblem.answer < 0) {
+            $(missingField).text("(" + currentProblem.answer + ")");
+        }
+    }
+
+    if (currentProblem.isCorrect()) {
+        $(missingField).animate({opacity: '1'}, "fast");
+        setTimeout(function () {
+            $(missingField).animate({opacity: '0'}, "fast");
+        }, 500);
+    } else {
+        $(missingField).animate({opacity: '1'}, "slow");
+        $(missingField).animate({opacity: '0'}, "slow");
+        $(missingField).animate({opacity: '1'}, "slow");
+        $(missingField).animate({opacity: '0'}, "slow");
+        $(missingField).animate({opacity: '1'}, "slow");
+        setTimeout(function () {
+            $(missingField).animate({opacity: '0'}, "slow");
+        }, 4000);
+    }
+};
+
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
@@ -684,18 +714,8 @@ function Auswertung() {
         Anzahl_richtig++;
         $("#icc").attr("src", "pic/icc.png");
         Icc_animieren();
-        // $(Loes).css("background", "green");
-        // $(Loes).text(vergleichszahl);
-        // if (zuratendeZahl == 2) {
-        //     if (vergleichszahl < 0) {
-        //         $(Loes).text("(" + vergleichszahl + ")");
-        //     }
-        // }
-        // ;
-        // $(Loes).animate({opacity: '1'}, "fast");
-        // setTimeout(function () {
-        //     $(Loes).animate({opacity: '0'}, "fast");
-        // }, 500);
+        icc.animateAnswer();
+
         $("#status-text").css("color", "green");
         $("#status-text").empty();
 
@@ -708,27 +728,11 @@ function Auswertung() {
     } else {
         $("#icc").attr("src", "pic/icc_traurig.png");
         Icc_animieren();
-        $(Loes).css("background", "red");
-        $(Loes).text(vergleichszahl);
-        if (zuratendeZahl == 2) {
-            if (vergleichszahl < 0) {
-                $(Loes).text("(" + vergleichszahl + ")");
-            }
-        }
-        ;
-        $(Loes).animate({opacity: '1'}, "slow");
-        $(Loes).animate({opacity: '0'}, "slow");
-        $(Loes).animate({opacity: '1'}, "slow");
-        $(Loes).animate({opacity: '0'}, "slow");
-        $(Loes).animate({opacity: '1'}, "slow");
-        setTimeout(function () {
-            $(Loes).animate({opacity: '0'}, "slow");
-        }, 4000);
+        icc.animateAnswer();
         $("#status-text").css("color", "red");
         $("#status-text").empty();
 
-
-        var text = "Nein! Nein!! Nein!!! Nein!!!! Das ist leider falsch!!!!! Hier ist die Berichtigung: " + Text_Aufgabe + " = " + Ergebnis;
+        var text = "Nein! Nein!! Nein!!! Nein!!!! Das ist leider falsch!!!!! Hier ist die Berichtigung: " + currentProblem.toString();
         text = text.replace("/", ":");
         text = text.replace("*", "x");
         icc.status.typeText("slow", text);
