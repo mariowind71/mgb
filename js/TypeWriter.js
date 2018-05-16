@@ -17,7 +17,8 @@ TypeWriter.prototype.typeTask = function() {
             $("#audiofile")[0].play(); //Der Index 0 ist in diesem Fall das Element im DOM, das Jquery gekapselt hat.
         }
         this.textposition++;
-        setTimeout(this.typeTask(), this.speed);
+
+        setTimeout(this.typeTask.bind(this), this.speed);
     }
 };
 
