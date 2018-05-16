@@ -24,21 +24,17 @@ var gesamt = document.getElementById("Gesamtzeit");
 
 output1.innerHTML = 10 * slider1.value; // Display the default slider value
 output2.innerHTML = 5 * slider2.value; // Display the default slider value
-ZeitproFrage = 10 * this.value;
 gesamt.innerHTML = 10 * slider1.value * 5 * slider2.value;
 
 // Update the current slider value (each time you drag the slider handle)
 slider1.oninput = function () {
     output1.innerHTML = 10 * this.value;
-    FragenAnzahl = 10 * this.value;
-    //console.log(Fragenanzahl);
+
     gesamt.innerHTML = 10 * slider1.value * 5 * slider2.value;
 }
 
 slider2.oninput = function () {
     output2.innerHTML = 5 * this.value;
-    //ZeitproFrage = 5*this.value;
-    //console.log(ZeitproFrage);
     gesamt.innerHTML = 10 * slider1.value * 5 * slider2.value;
 }
 
@@ -102,7 +98,7 @@ Icc.prototype.addEventHandlers = function() {
 
 Icc.prototype.closeWelcomeScreen = function() {
     $("#start").remove();
-    this.status.typeText("normal", "Herzlich willkommen! Ick bin Icc. Das bedeutet: I can calculate!!! Wir trainieren hier das schnelle Kopfrechnen. Klick mich und es geht los. Klick den Stempel und ich sage dir, ob du richtig gerechnet hast!");
+    this.status.typeText("normal", "black", "Herzlich willkommen! Ick bin Icc. Das bedeutet: I can calculate!!! Wir trainieren hier das schnelle Kopfrechnen. Klick mich und es geht los. Klick den Stempel und ich sage dir, ob du richtig gerechnet hast!");
 };
 
 Icc.prototype.animateTime = function(milliseconds) {
@@ -153,12 +149,12 @@ Icc.prototype.showResults = function() {
     $("#status-text").css("font-size", "18px");
     $("#status-text").empty();
 
-    this.status.typeText("normal", "Nächste Runde! Klick mich und es geht von vorne los. Vielleicht willst du ja auch die Einstellungen (Aufgabenart, Zeitvorgabe, Anzahl der Aufgaben ändern? Schau doch mal im Menu über mir nach!");
+    this.status.typeText("normal", "black", "Nächste Runde! Klick mich und es geht von vorne los. Vielleicht willst du ja auch die Einstellungen (Aufgabenart, Zeitvorgabe, Anzahl der Aufgaben ändern? Schau doch mal im Menu über mir nach!");
 };
 
 Icc.prototype.solve = function () {
     $("#bar-timeleft").stop(true);
-     Auswertung();
+    this.renderAnswer();
     var that = this;
 
     if (this.round.isOver()) {
@@ -170,6 +166,94 @@ Icc.prototype.solve = function () {
         }, pause);
     }
 
+};
+
+Icc.prototype.renderAnswer = function() {
+    $("#status-text").css("font-size", "22px");
+    var currentProblem = icc.round.getCurrentProblem();
+
+    verbrauchteZeit = (300 - $("#bar-timeleft").height()) / 300 * 5 * slider2.value;
+    GesamtverbrauchteZeit = GesamtverbrauchteZeit + verbrauchteZeit;
+
+    if (currentProblem.isCorrect()) {
+        Anzahl_richtig++;
+        this.animateMascot("happy");
+        icc.animateMissingField();
+        icc.status.typeText("normal", "green", "Ja! Ja! Ja! Ja! Das ist genau richtig! Super!!!!! Das ist ja sensationell!!! " + currentProblem.toString());
+
+        this.addRightWrongBarSegment("green");
+    } else {
+        this.animateMascot("sad");
+        icc.animateMissingField();
+        icc.status.typeText("slow", "red", "Nein! Nein!! Nein!!! Nein!!!! Das ist leider falsch!!!!! Hier ist die Berichtigung: " + currentProblem.toString());
+
+        this.addRightWrongBarSegment("red");
+    }
+
+    this.animateAccuracyBar();
+};
+
+Icc.prototype.animateMascot = function(mood) {
+    var img = $("#icc");
+
+    switch(mood) {
+        case "sad":
+            img.attr("src", "pic/icc_traurig.png");
+            break;
+        case "happy":
+            img.attr("src", "pic/icc.png");
+            break;
+    }
+
+    for (var i = 0; i < 3; i++) {
+        img.animate({top: '+=40px', height: '80px'}, "fast");
+        img.animate({top: '-=40px', height: '120px'}, "fast");
+    }
+};
+
+Icc.prototype.animateMissingField = function () {
+    var currentProblem = this.round.getCurrentProblem();
+    var missingField = $("#solution" + currentProblem.missing);
+    var fieldColor = currentProblem.isCorrect() ? "green" : "red";
+
+    $(missingField).css("background", fieldColor);
+    $(missingField).text(currentProblem.solution);
+    if (currentProblem.missing === 2) {
+        if (currentProblem.solution < 0) {
+            $(missingField).text("(" + currentProblem.solution + ")");
+        }
+    }
+
+    if (currentProblem.isCorrect()) {
+        $(missingField).animate({opacity: '1'}, "fast");
+        setTimeout(function () {
+            $(missingField).animate({opacity: '0'}, "fast");
+        }, 500);
+    } else {
+        $(missingField).animate({opacity: '1'}, "slow");
+        $(missingField).animate({opacity: '0'}, "slow");
+        $(missingField).animate({opacity: '1'}, "slow");
+        $(missingField).animate({opacity: '0'}, "slow");
+        $(missingField).animate({opacity: '1'}, "slow");
+        setTimeout(function () {
+            $(missingField).animate({opacity: '0'}, "slow");
+        }, 4000);
+    }
+};
+
+Icc.prototype.addRightWrongBarSegment = function(color) {
+    var barHeight = 150 / this.round.problemCount;
+    var barSegment = document.createElement("div");
+    barSegment.style = "position: absolute;width:40px;";
+    barSegment.style.background = color;
+    barSegment.style.height = barHeight + "px";
+    barSegment.style.bottom = (this.round.problemIndex) * barHeight + "px";
+    document.getElementById("bar-right-wrong").appendChild(barSegment);
+};
+
+Icc.prototype.animateAccuracyBar = function() {
+    $("#percentage-right").animate({height: this.round.getCorrectProblemsCount() / (this.round.problemIndex + 1) * 150}, "slow");
+    $("#percentage-wrong").animate({height: ((this.round.problemIndex + 1) - this.round.getCorrectProblemsCount()) / (this.round.problemIndex + 1) * 150}, "slow");
 };
 
 Icc.prototype.showProblem = function() {
@@ -283,35 +367,7 @@ Icc.prototype.renderDisplay = function() {
 
 };
 
-Icc.prototype.animateAnswer = function () {
-    var currentProblem = this.round.getCurrentProblem();
-    var missingField = $("#solution" + currentProblem.missing);
-    var fieldColor = currentProblem.isCorrect() ? "green" : "red";
 
-    $(missingField).css("background", fieldColor);
-    $(missingField).text(currentProblem.answer);
-    if (currentProblem.missing === 2) {
-        if (currentProblem.answer < 0) {
-            $(missingField).text("(" + currentProblem.answer + ")");
-        }
-    }
-
-    if (currentProblem.isCorrect()) {
-        $(missingField).animate({opacity: '1'}, "fast");
-        setTimeout(function () {
-            $(missingField).animate({opacity: '0'}, "fast");
-        }, 500);
-    } else {
-        $(missingField).animate({opacity: '1'}, "slow");
-        $(missingField).animate({opacity: '0'}, "slow");
-        $(missingField).animate({opacity: '1'}, "slow");
-        $(missingField).animate({opacity: '0'}, "slow");
-        $(missingField).animate({opacity: '1'}, "slow");
-        setTimeout(function () {
-            $(missingField).animate({opacity: '0'}, "slow");
-        }, 4000);
-    }
-};
 
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
@@ -320,8 +376,7 @@ function getRandomIntInclusive(min, max) {
 }
 
 function Variablen_initialisieren() {
-    FragenAnzahl = 10 * slider1.value;
-    ZeitproFrage = 5 * slider2.value;
+
     verbrauchteZeit = 0;
     GesamtverbrauchteZeit = 0;
     Anzahl_richtig = 0;
@@ -331,13 +386,7 @@ function Variablen_initialisieren() {
     Zehner = 200;
     Hunderter = 200;
     Ziffern = new Array();
-    //var Fragen = new Array();
-    //var Punkte = 0;
-    //var Runden = 0;
-    //var aktZiff = 0;
-    //var vorzeichen = "+";
-    //var gesperrt = true;
-    var richtigeAntwort;
+
 
     $("#icc").attr("src", "pic/icc.png");
     $("#bar-timeleft").css("backgroundColor", "green");
@@ -689,79 +738,24 @@ function Aufgabe_ausgeben() {
 };
 
 
-
-function Balken_aktualisieren(farbe) {
-    var Balkenhoehe = 150 / (10 * slider1.value);
-    var Balken = document.createElement("div");
-    Balken.style = "position: absolute;width:40px;";
-    Balken.style.background = farbe;
-    Balken.style.height = Balkenhoehe + "px";
-    Balken.style.bottom = (Fragennummer - 1) * Balkenhoehe + "px";
-    document.getElementById("bar-accuracy").appendChild(Balken);
-    $("#percentage-right").animate({height: Anzahl_richtig / Fragennummer * 150,}, "slow");
-    $("#percentage-wrong").animate({height: (Fragennummer - Anzahl_richtig) / Fragennummer * 150,}, "slow");
-}
-
-function Auswertung() {
-    $("#status-text").css("font-size", "22px");
-    var currentProblem = icc.round.getCurrentProblem();
-    var richtig = currentProblem.isCorrect();
-
-    verbrauchteZeit = (300 - $("#bar-timeleft").height()) / 300 * 5 * slider2.value;
-    GesamtverbrauchteZeit = GesamtverbrauchteZeit + verbrauchteZeit;
-
-    if (richtig) {
-        Anzahl_richtig++;
-        $("#icc").attr("src", "pic/icc.png");
-        Icc_animieren();
-        icc.animateAnswer();
-
-        $("#status-text").css("color", "green");
-        $("#status-text").empty();
-
-        var text = "Ja! Ja! Ja! Ja! Das ist genau richtig! Super!!!!! Das ist ja sensationell!!! " + currentProblem.toString();
-        text = text.replace("/", ":");
-        text = text.replace("*", "x");
-        icc.status.typeText("normal", text);
-
-        Balken_aktualisieren("green");
-    } else {
-        $("#icc").attr("src", "pic/icc_traurig.png");
-        Icc_animieren();
-        icc.animateAnswer();
-        $("#status-text").css("color", "red");
-        $("#status-text").empty();
-
-        var text = "Nein! Nein!! Nein!!! Nein!!!! Das ist leider falsch!!!!! Hier ist die Berichtigung: " + currentProblem.toString();
-        text = text.replace("/", ":");
-        text = text.replace("*", "x");
-        icc.status.typeText("slow", text);
-        Balken_aktualisieren("red");
-    }
-    ;
-};
-
 function Statistik_Uebersicht() {
     //$( "#statistics" ).css("color", "red");
     var Statistik1 = document.createElement("p");
     var Statistik2 = document.createElement("p");
     var Statistik3 = document.createElement("p");
-    var t1 = "";
-    var t2 = "";
-    var t3 = "";
+
     Statistik1.id = "total";
     Statistik2.id = "prozentual";
     Statistik3.id = "verbrauchteZeit";
     document.getElementById("statistics").appendChild(Statistik1);
     document.getElementById("statistics").appendChild(Statistik2);
     document.getElementById("statistics").appendChild(Statistik3);
-    t1 = "Du hast " + Anzahl_richtig + " von " + FragenAnzahl + " Aufgaben richtig gerechnet.";
-    t2 = "Das entspricht " + Math.round(Anzahl_richtig / FragenAnzahl * 1000) / 10 + "%."
-    t3 = "Dafür hast du genau  " + Math.round(GesamtverbrauchteZeit * 10) / 10 + " Sekunden benötigt."
-    $("#total").text(t1);
-    $("#prozentual").text(t2);
-    $("#verbrauchteZeit").text(t3);
-};
+
+    $("#total").text("Du hast " + icc.round.getCorrectProblemsCount() + " von " + icc.round.problemCount + " Aufgaben richtig gerechnet.");
+    $("#prozentual").text("Das entspricht " + Math.round(icc.round.getCorrectProblemsCount() / icc.round.problemCount * 1000) / 10 + "%.");
+    $("#verbrauchteZeit").text("Dafür hast du genau  " + Math.round(GesamtverbrauchteZeit * 10) / 10 + " Sekunden benötigt.");
+
+}
 
 $("#numberpad .btn-calc").on("click", function() {
 
@@ -950,20 +944,6 @@ $(document).ready(function () {
         }
     });
 });
-
-// $("#icc").click(function () {
-//     Aufgabe_ausgeben();
-//     $("#icc").unbind("click");
-// });
-
-function Icc_animieren() {
-    var img = $("#icc");
-    //img.animate({top: '70%', height: '30%', width: '30%'}, 3000);
-    for (i = 0; i < 3; i++) {
-        img.animate({top: '+=40px', height: '80px'}, "fast");
-        img.animate({top: '-=40px', height: '120px'}, "fast");
-    }
-}
 
 function isNumeric(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);

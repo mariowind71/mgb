@@ -6,8 +6,9 @@ function Status() {
     return this;
 }
 
-Status.prototype.typeText = function (speed, text) {
+Status.prototype.typeText = function (speed, color, text) {
     this.textElement.empty();
+    this.textElement.css("color", color);
     this.typeWriter.speed = this.getSpeed(speed);
     this.typeWriter.text = text;
     this.typeWriter.type();

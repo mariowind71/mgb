@@ -34,6 +34,16 @@ Round.prototype.getNextProblem = function () {
     }
 };
 
+Round.prototype.getCorrectProblemsCount = function() {
+    var correctlySolved = 0;
+    for (var i = 0; i <= this.problemIndex;i++) {
+        if (this.problemList[i].isCorrect()) {
+            correctlySolved++;
+        }
+    }
+    return correctlySolved;
+};
+
 Round.prototype.results = function () {
 
 };

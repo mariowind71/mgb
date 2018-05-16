@@ -16,5 +16,6 @@ Problem.prototype.isCorrect = function () {
 };
 
 Problem.prototype.toString = function () {
-    return this.one + " " + this.operator + " " + this.two + " = " + this.solution;
+    var problemString = this.one + " " + this.operator + " " + this.two + " = " + this.solution;
+    return problemString.replace("/", ":").replace("*", "x")
 };
