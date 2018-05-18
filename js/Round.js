@@ -6,6 +6,8 @@ function Round(time, problemCount, plusminus, multiplydivide, natural) {
     this.plusminus = plusminus;
     this.multiplydivide = multiplydivide;
     this.natural = natural;
+    this.timeElapsed = 0;
+
 
     this.generateProblems();
 }
@@ -44,28 +46,34 @@ Round.prototype.getCorrectProblemsCount = function() {
     return correctlySolved;
 };
 
-Round.prototype.results = function () {
-
-};
-
 Round.prototype.isOver = function() {
-    return this.problemIndex === this.problemCount;
+    return this.problemIndex + 1 === this.problemCount;
 };
 
 Round.prototype.getPlusminusProblem = function() {
-    var one = this.getRandomInt(0, 99);
-    var two = this.getRandomInt(0, one);
+    var one = this.getRandomInt(1, 99);
+    var two = this.getRandomInt(1, one);
     var operator = ['+', '-'][this.getRandomInt(0, 1)];
     var solution = new Function('return ' + one + '' + operator + '' + two)() + "";
+
+    if (solution < 0 || solution > 100 || !this.isWholeNumber(solution)) {
+        return this.getPlusminusProblem();
+    }
+
     var missing = this.getRandomInt(1, 3);
     return new Problem(one, two, operator, solution, missing);
 };
 
 Round.prototype.getMultiplyDivideProblem = function() {
-    var one = this.getRandomInt(0, 10);
-    var two = this.getRandomInt(0, 10);
+    var one = this.getRandomInt(1, 10);
+    var two = this.getRandomInt(1, 10);
     var operator = ['*', '/'][this.getRandomInt(0, 1)];
     var solution = new Function('return ' + one + '' + operator + '' + two)() + "";
+
+    if (solution < 0 || solution > 100 || !this.isWholeNumber(solution)) {
+        return this.getMultiplyDivideProblem();
+    }
+
     var missing = this.getRandomInt(1, 3);
     return new Problem(one, two, operator, solution, missing);
 };
@@ -74,4 +82,8 @@ Round.prototype.getRandomInt = function(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+Round.prototype.isWholeNumber = function (number) {
+    return number % 1 === 0;
 };
