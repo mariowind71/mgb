@@ -1,1 +1,0 @@
-var Operators = {"plus": "+", "minus": "-", "multiply": "*", "divide": "/"};
