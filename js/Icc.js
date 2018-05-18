@@ -1,70 +1,3 @@
-/* Full Page Tabs */
-function openPage(pageName, elmnt, color) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablink");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].style.backgroundColor = "";
-    }
-    document.getElementById(pageName).style.display = "block";
-    elmnt.style.backgroundColor = color;
-}
-
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
-
-var slider1 = document.getElementById("SL_AnzahlAufgaben");
-var output1 = document.getElementById("AnzahlAufgaben");
-slider2 = document.getElementById("SL_ZeitproAufgabe");
-var output2 = document.getElementById("ZeitproAufgabe");
-var gesamt = document.getElementById("Gesamtzeit");
-
-output1.innerHTML = 10 * slider1.value; // Display the default slider value
-output2.innerHTML = 5 * slider2.value; // Display the default slider value
-gesamt.innerHTML = 10 * slider1.value * 5 * slider2.value;
-
-// Update the current slider value (each time you drag the slider handle)
-slider1.oninput = function () {
-    output1.innerHTML = 10 * this.value;
-
-    gesamt.innerHTML = 10 * slider1.value * 5 * slider2.value;
-}
-
-slider2.oninput = function () {
-    output2.innerHTML = 5 * this.value;
-    gesamt.innerHTML = 10 * slider1.value * 5 * slider2.value;
-}
-
-// Get the modal
-var modal = document.getElementById('myModal');
-
-// Get the button that opens the modal
-var btn = document.getElementById("Menu_oeffnen");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks the button, open the modal
-btn.onclick = function () {
-    modal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function () {
-    modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function (event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-/* Full Page Tabs */
-
 function Icc() {
     this.status = new Status();
     this.problem = new Problem();
@@ -130,6 +63,7 @@ Icc.prototype.addEventHandlers = function() {
     $('#results').on("click", this.nextRound.bind(this));
     $("#btn-solve").on("click", this.solve.bind(this));
     $("#numberpad .btn-calc").on("click", this.buttonPressed.bind(this));
+    $("#btn-plusminus").on("click", this.toggleParentheses.bind(this));
 };
 
 Icc.prototype.closeWelcomeScreen = function() {
@@ -170,9 +104,9 @@ Icc.prototype.animateTime = function(milliseconds) {
 
 Icc.prototype.showResults = function() {
 
-    var statistic1 = $("<p>", {id: "total", text: "Du hast " + icc.round.getCorrectProblemsCount() + " von " + icc.round.problemCount + " Aufgaben richtig gerechnet."});
-    var statistic2 = $("<p>", {id: "prozentual", text: "Das entspricht " + Math.round(icc.round.getCorrectProblemsCount() / icc.round.problemCount * 1000) / 10 + "%."});
-    var statistic3 = $("<p>", {id: "verbrauchteZeit", text: "Dafür hast du genau  " + Math.round(this.round.timeElapsed * 10) / 10 + " Sekunden benötigt."});
+    var statistic1 = $("<p>", {id: "total", text: "Du hast " + this.round.getCorrectProblemsCount() + " von " + this.round.problemCount + " Aufgaben richtig gerechnet."});
+    var statistic2 = $("<p>", {id: "prozentual", text: "Das entspricht " + Math.round(this.round.getCorrectProblemsCount() / this.round.problemCount * 1000) / 10 + "%."});
+    var statistic3 = $("<p>", {id: "verbrauchteZeit", text: "Dafür hast du genau  " + Math.round(this.round.getTimeElapsed() * 10) / 10 + " Sekunden benötigt."});
 
     $("#statistics").empty().append([statistic1, statistic2, statistic3]);
     $("#results").css("visibility", "visible");
@@ -204,7 +138,7 @@ Icc.prototype.buttonPressed = function(event) {
     if (this.round !== null) {
         var currentAnswer = this.round.getCurrentProblem().answer;
 
-        if (isNumeric(pressedButton.value)) {
+        if (!isNaN(parseFloat(pressedButton.value)) && isFinite(pressedButton.value)) {
             if (currentAnswer === null) {
                 currentAnswer = pressedButton.value;
             } else {
@@ -224,29 +158,56 @@ Icc.prototype.buttonPressed = function(event) {
             }
         }
 
-        icc.round.getCurrentProblem().answer = currentAnswer;
+        this.round.getCurrentProblem().answer = currentAnswer;
 
-        icc.renderDisplay();
+        this.renderDisplay();
+    }
+};
+
+Icc.prototype.toggleParentheses = function() {
+    var klammer = $("#klammer_auf,#klammer_zu");
+    if (this.round.getCurrentProblem().missing === 1) {
+        if ($("#z1-0").is(':hidden')) {				//if (vorzeichen=="-"){
+            $("#z1-0").show();
+        } else {
+            $("#z1-0").hide();
+        }
+    }
+    if (this.round.getCurrentProblem().missing === 2) {
+        if ($("#z2-0").is(':hidden')) {				//if (vorzeichen=="-"){
+            $("#z2-0").show();
+            klammer.animate({width: '9px'}, "fast");
+        } else {
+            $("#z2-0").hide();
+            klammer.animate({width: '0px'}, "fast");
+        }
+    }
+    if (this.round.getCurrentProblem().missing === 3) {
+        if ($("#z3-0").is(':hidden')) {				//if (vorzeichen=="-"){
+            $("#z3-0").show();
+        } else {
+            $("#z3-0").hide();
+        }
     }
 };
 
 Icc.prototype.renderAnswer = function() {
     $("#status-text").css("font-size", "22px");
-    var currentProblem = icc.round.getCurrentProblem();
+    var currentProblem = this.round.getCurrentProblem();
 
     currentProblem.timeElapsed = (300 - $("#bar-timeleft").height()) / 300 * 5 * slider2.value;
-    this.round.timeElapsed += currentProblem.timeElapsed;
+
 
     if (currentProblem.isCorrect()) {
         this.animateMascot("happy");
-        icc.animateMissingField();
-        icc.status.typeText("normal", "green", "Ja! Ja! Ja! Ja! Das ist genau richtig! Super!!!!! Das ist ja sensationell!!! " + currentProblem.toString());
+        this.animateMissingField();
+        this.status.typeText("normal", "green", "Ja! Ja! Ja! Ja! Das ist genau richtig! Super!!!!! Das ist ja sensationell!!! " + currentProblem.toString());
 
         this.addRightWrongBarSegment("green");
     } else {
         this.animateMascot("sad");
-        icc.animateMissingField();
-        icc.status.typeText("slow", "red", "Nein! Nein!! Nein!!! Nein!!!! Das ist leider falsch!!!!! Hier ist die Berichtigung: " + currentProblem.toString());
+        this.animateMissingField();
+        this.status.typeText("slow", "red", "Nein! Nein!! Nein!!! Nein!!!! Das ist leider falsch!!!!! Hier ist die Berichtigung: " + currentProblem.toString());
 
         this.addRightWrongBarSegment("red");
     }
@@ -318,15 +279,14 @@ Icc.prototype.animateAccuracyBar = function() {
 };
 
 Icc.prototype.showProblem = function() {
-    var problem = this.round.getCurrentProblem();
     this.renderDisplay();
-    icc.animateTime(slider2.value * 1000);
+    this.animateTime(slider2.value * 1000);
 };
 
 Icc.prototype.showNextProblem = function() {
-    var problem = this.round.getNextProblem();
+    this.round.nextProblem();
     this.renderDisplay();
-    icc.animateTime(slider2.value * 1000);
+    this.animateTime(slider2.value * 1000);
 };
 
 Icc.prototype.renderDisplay = function() {
@@ -427,47 +387,3 @@ Icc.prototype.renderDisplay = function() {
     }
 
 };
-
-$(document).ready(function () {
-    $("#btn-plusminus").click(function () {
-        var klammer = $("#klammer_auf,#klammer_zu");
-        if (zuratendeZahl == 1) {
-            if ($("#z1-0").is(':hidden')) {				//if (vorzeichen=="-"){
-                $("#z1-0").show();
-            } else {
-                $("#z1-0").hide();
-            }
-        }
-        if (zuratendeZahl == 2) {
-            if ($("#z2-0").is(':hidden')) {				//if (vorzeichen=="-"){
-                $("#z2-0").show();
-                klammer.animate({width: '9px'}, "fast");
-            } else {
-                $("#z2-0").hide();
-                klammer.animate({width: '0px'}, "fast");
-            }
-        }
-        if (zuratendeZahl == 3) {
-            if ($("#z3-0").is(':hidden')) {				//if (vorzeichen=="-"){
-                $("#z3-0").show();
-            } else {
-                $("#z3-0").hide();
-            }
-        }
-    });
-
-    $("#plusminus").change(function () {
-        if (!this.checked) {
-            $('#maldurch').attr('checked', !this.checked);				//FUNKTIONIERT NICHT!!!
-        }
-    });
-    $("#maldurch").change(function () {
-        if (!this.checked) {
-            $('#plusminus').attr('checked', !this.checked);
-        }
-    });
-});
-
-function isNumeric(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
-}

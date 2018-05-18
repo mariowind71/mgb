@@ -6,8 +6,6 @@ function Round(time, problemCount, plusminus, multiplydivide, natural) {
     this.plusminus = plusminus;
     this.multiplydivide = multiplydivide;
     this.natural = natural;
-    this.timeElapsed = 0;
-
 
     this.generateProblems();
 }
@@ -29,11 +27,18 @@ Round.prototype.getCurrentProblem = function() {
     return this.problemList[this.problemIndex];
 };
 
-Round.prototype.getNextProblem = function () {
+Round.prototype.nextProblem = function () {
     if (!this.isOver()) {
         this.problemIndex++;
-        return this.getCurrentProblem();
     }
+};
+
+Round.prototype.getTimeElapsed = function() {
+    var sum = 0;
+    this.problemList.forEach(function (problem) {
+       sum += problem.timeElapsed;
+    });
+    return sum;
 };
 
 Round.prototype.getCorrectProblemsCount = function() {
