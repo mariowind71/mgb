@@ -56,12 +56,14 @@ Round.prototype.isOver = function() {
 };
 
 Round.prototype.getPlusminusProblem = function() {
-    var one = this.getRandomInt(1, 99);
-    var two = this.getRandomInt(1, one);
-    var operator = ['+', '-'][this.getRandomInt(0, 1)];
-    var solution = new Function('return ' + one + '' + operator + '' + two)() + "";
+    var min = this.getLowerLimit(-99);
+    var one = this.getRandomInt(min, 99);
+    var two = this.getRandomInt(min, one);
 
-    if (solution < 0 || solution > 100 || !this.isWholeNumber(solution)) {
+    var operator = ['+', '-'][this.getRandomInt(0, 1)];
+    var solution = new Function('return ' + one + '' + operator + '(' + two + ')')() + "";
+
+    if (solution < -100 || solution > 100 || !this.isInteger(solution)) {
         return this.getPlusminusProblem();
     }
 
@@ -70,12 +72,13 @@ Round.prototype.getPlusminusProblem = function() {
 };
 
 Round.prototype.getMultiplyDivideProblem = function() {
-    var one = this.getRandomInt(1, 10);
-    var two = this.getRandomInt(1, 10);
+    var min = this.getLowerLimit(-10);
+    var one = this.getRandomInt(min, 10);
+    var two = this.getRandomInt(min, 10);
     var operator = ['*', '/'][this.getRandomInt(0, 1)];
-    var solution = new Function('return ' + one + '' + operator + '' + two)() + "";
+    var solution = new Function('return ' + one + '' + operator + '(' + two + ')')() + "";
 
-    if (solution < 0 || solution > 100 || !this.isWholeNumber(solution)) {
+    if (solution < -100 || solution > 100 || !this.isInteger(solution)) {
         return this.getMultiplyDivideProblem();
     }
 
@@ -89,6 +92,14 @@ Round.prototype.getRandomInt = function(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-Round.prototype.isWholeNumber = function (number) {
+Round.prototype.isInteger = function (number) {
     return number % 1 === 0;
+};
+
+Round.prototype.getLowerLimit = function(min) {
+    if (this.natural) {
+        return 1;
+    } else {
+        return min;
+    }
 };
