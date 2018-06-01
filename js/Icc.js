@@ -1,7 +1,9 @@
 function Icc() {
     this.status = new Status();
     this.problem = new Problem();
+    this.display = new Display();
     this.round = null;
+
     this.addEventHandlers();
     this.init();
 }
@@ -168,9 +170,9 @@ Icc.prototype.buttonPressed = function(event) {
             }
         }
 
-        this.round.getCurrentProblem().answer = currentAnswer;
+        currentProblem.answer = currentAnswer;
 
-        this.renderDisplay();
+        this.display.render(currentProblem);
     }
 };
 
@@ -183,13 +185,13 @@ Icc.prototype.renderAnswer = function() {
 
     if (currentProblem.isCorrect()) {
         this.animateMascot("happy");
-        this.animateMissingField();
+        this.display.animateMissingField();
         this.status.typeText("normal", "green", "Ja! Ja! Ja! Ja! Das ist genau richtig! Super!!!!! Das ist ja sensationell!!! " + currentProblem.toString());
 
         this.addRightWrongBarSegment("green");
     } else {
         this.animateMascot("sad");
-        this.animateMissingField();
+        this.display.animateMissingField();
         this.status.typeText("slow", "red", "Nein! Nein!! Nein!!! Nein!!!! Das ist leider falsch!!!!! Hier ist die Berichtigung: " + currentProblem.toString());
 
         this.addRightWrongBarSegment("red");
@@ -216,35 +218,6 @@ Icc.prototype.animateMascot = function(mood) {
     }
 };
 
-Icc.prototype.animateMissingField = function () {
-    var currentProblem = this.round.getCurrentProblem();
-    var $missingField = $("#solution" + currentProblem.missing);
-    var fieldColor = currentProblem.isCorrect() ? "green" : "red";
-
-    $missingField.css("background", fieldColor);
-    $missingField.text(currentProblem.getMissingValue());
-    if (currentProblem.missing === 2) {
-        if (currentProblem.getMissingValue() < 0) {
-            $missingField.text("(" + $missingField.text() + ")");
-        }
-    }
-
-    if (currentProblem.isCorrect()) {
-        $missingField.animate({opacity: '1'}, "fast");
-        setTimeout(function () {
-            $missingField.animate({opacity: '0'}, "fast");
-        }, 500);
-    } else {
-        $missingField.animate({opacity: '1'}, "slow");
-        $missingField.animate({opacity: '0'}, "slow");
-        $missingField.animate({opacity: '1'}, "slow");
-        $missingField.animate({opacity: '0'}, "slow");
-        $missingField.animate({opacity: '1'}, "slow");
-        setTimeout(function () {
-            $missingField.animate({opacity: '0'}, "slow");
-        }, 4000);
-    }
-};
 
 Icc.prototype.addRightWrongBarSegment = function(color) {
     var barHeight = 150 / this.round.problemCount;
@@ -262,120 +235,12 @@ Icc.prototype.animateAccuracyBar = function() {
 };
 
 Icc.prototype.showProblem = function() {
-    this.renderDisplay();
+    this.display.render(this.round.getCurrentProblem());
     this.animateTime(slider2.value * 1000);
 };
 
 Icc.prototype.showNextProblem = function() {
     this.round.nextProblem();
-    this.renderDisplay();
+    this.display.render(this.round.getCurrentProblem());
     this.animateTime(slider2.value * 1000);
-};
-
-Icc.prototype.renderDisplay = function() {
-
-    var currentProblem = this.round.getCurrentProblem();
-    var blankImage = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
-
-    $("#z1-0").attr("src", blankImage);
-    $("#z1-1").attr("src", blankImage);
-    $("#z1-2").attr("src", blankImage);
-
-    $("#z2-0").attr("src", blankImage);
-    $("#z2-1").attr("src", blankImage);
-    $("#z2-2").attr("src", blankImage);
-
-    $("#z3-0").attr("src", blankImage);
-    $("#z3-1").attr("src", blankImage);
-    $("#z3-2").attr("src", blankImage);
-    $("#z3-3").attr("src", blankImage);
-
-    $("#operator").attr("src", {"+": "pic/plus_k.png", "-": "pic/minus_k.png", "*": "pic/mal_k.png", "/": "pic/durch_k.png"}[currentProblem.operator]);
-
-    var oneString = currentProblem.one.toString();
-    if (currentProblem.missing === 1) {
-        oneString = currentProblem.answer === null ? "" : currentProblem.answer;
-    }
-
-    switch (oneString.length) {
-        case 3:
-            $("#z1-0").attr("src", oneString.charAt(0) === "-" ? "pic/minus_k.png" : blankImage).css("display", "block");
-            $("#z1-1").attr("src", "pic/d" + oneString.charAt(1) + ".png").css("display", "block");
-            $("#z1-2").attr("src", "pic/d" + oneString.charAt(2) + ".png").css("display", "block");
-            break;
-        case 2:
-            $("#z1-0").attr("src", blankImage).css("display", "block");
-            $("#z1-1").attr("src", oneString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + oneString.charAt(0) + ".png").css("display", "block");
-            $("#z1-2").attr("src", "pic/d" + oneString.charAt(1) + ".png").css("display", "block");
-            break;
-        case 1:
-            $("#z1-0").attr("src", blankImage).css("display", "block");
-            $("#z1-1").attr("src", blankImage).css("display", "block");
-            $("#z1-2").attr("src", oneString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + oneString.charAt(0) + ".png").css("display", "block");
-            break;
-    }
-
-
-    var twoString = currentProblem.two.toString();
-    if (currentProblem.missing === 2) {
-        twoString = currentProblem.answer === null ? "" : currentProblem.answer;
-    }
-
-    switch (twoString.length) {
-        case 3:
-            $("#z2-0").attr("src", twoString.charAt(0) === "-" ? ("pic/minus_k.png") : blankImage).css("display", "block");
-            $("#z2-1").attr("src", "pic/d" + twoString.charAt(1) + ".png").css("display", "block");
-            $("#z2-2").attr("src", "pic/d" + twoString.charAt(2) + ".png").css("display", "block");
-            break;
-        case 2:
-            $("#z2-0").attr("src", blankImage).css("display", "block");
-            $("#z2-1").attr("src", twoString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + twoString.charAt(0) + ".png").css("display", "block");
-            $("#z2-2").attr("src", "pic/d" + twoString.charAt(1) + ".png").css("display", "block");
-            break;
-        case 1:
-            $("#z2-0").attr("src", blankImage).css("display", "block");
-            $("#z2-1").attr("src", blankImage).css("display", "block");
-            $("#z2-2").attr("src", twoString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + twoString.charAt(0) + ".png").css("display", "block");
-            break;
-    }
-
-    var klammer = $("#klammer_auf,#klammer_zu");
-    klammer.css("width", "0px");
-    if (twoString.startsWith("-")) {
-        klammer.animate({width: '9px'}, "fast");
-    }
-
-    var solutionString = currentProblem.solution.toString();
-    if (currentProblem.missing === 3) {
-        solutionString = currentProblem.answer === null ? "" : currentProblem.answer;
-    }
-
-    switch (solutionString.length) {
-
-        case 4:
-            $("#z3-0").attr("src", solutionString.charAt(0) === "-" ? "pic/minus_k.png" : blankImage).css("display", "block");
-            $("#z3-1").attr("src", "pic/d" + solutionString.charAt(1) + ".png").css("display", "block");
-            $("#z3-2").attr("src", "pic/d" + solutionString.charAt(2) + ".png").css("display", "block");
-            $("#z3-3").attr("src", "pic/d" + solutionString.charAt(3) + ".png").css("display", "block");
-            break;
-        case 3:
-            $("#z3-0").attr("src", blankImage).css("display", "block");
-            $("#z3-1").attr("src", solutionString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + solutionString.charAt(0) + ".png").css("display", "block");
-            $("#z3-2").attr("src", "pic/d" + solutionString.charAt(1) + ".png").css("display", "block");
-            $("#z3-3").attr("src", "pic/d" + solutionString.charAt(2) + ".png").css("display", "block");
-            break;
-        case 2:
-            $("#z3-0").attr("src", blankImage).css("display", "block");
-            $("#z3-1").attr("src", blankImage).css("display", "block");
-            $("#z3-2").attr("src", solutionString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + solutionString.charAt(0) + ".png").css("display", "block");
-            $("#z3-3").attr("src", "pic/d" + solutionString.charAt(1) + ".png").css("display", "block");
-            break;
-        case 1:
-            $("#z3-0").attr("src", blankImage).css("display", "block");
-            $("#z3-1").attr("src", blankImage).css("display", "block");
-            $("#z3-2").attr("src", blankImage).css("display", "block");
-            $("#z3-3").attr("src", solutionString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + solutionString.charAt(0) + ".png").css("display", "block");
-            break;
-    }
-
 };
