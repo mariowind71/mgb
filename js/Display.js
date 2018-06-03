@@ -1,6 +1,7 @@
 function Display() {
     this.currentProblem = null;
     this.blankImage = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+    this.init();
 }
 
 Display.prototype.render = function(problem) {
@@ -14,6 +15,26 @@ Display.prototype.render = function(problem) {
     this.renderSecondSegment();
     this.renderSolution();
 
+};
+
+Display.prototype.init = function() {
+    $('#z1-0').attr("src", this.blankImage);
+    $('#z1-1').attr("src", this.blankImage);
+    $('#z1-2').attr("src", "pic/d1.png");
+    $('#operator').attr("src", "pic/plus_k.png");
+    $('#klammer_auf').attr("src", "pic/klammerauf.png");
+    $('#z2-0').attr("src", this.blankImage);
+    $('#z2-1').attr("src", this.blankImage);
+    $('#z2-2').attr("src", "pic/d1.png");
+    $('#klammer_zu').attr("src", "pic/klammerzu.png");
+    $('#gl').attr("src", "pic/gl.png");
+    $('#z3-0').attr("src", this.blankImage);
+    $('#z3-1').attr("src", this.blankImage);
+    $('#z3-2').attr("src", this.blankImage);
+    $('#z3-3').attr("src", "pic/d2.png");
+
+    $("#klammer_auf").hide();
+    $("#klammer_zu").hide();
 };
 
 Display.prototype.clear = function() {
@@ -45,19 +66,19 @@ Display.prototype.renderFirstSegment = function () {
 
     switch (oneString.length) {
         case 3:
-            $("#z1-0").attr("src", oneString.charAt(0) === "-" ? "pic/minus_k.png" : this.blankImage).css("display", "block");
-            $("#z1-1").attr("src", "pic/d" + oneString.charAt(1) + ".png").css("display", "block");
-            $("#z1-2").attr("src", "pic/d" + oneString.charAt(2) + ".png").css("display", "block");
+            $("#z1-0").attr("src", oneString.charAt(0) === "-" ? "pic/minus_k.png" : this.blankImage);
+            $("#z1-1").attr("src", "pic/d" + oneString.charAt(1) + ".png");
+            $("#z1-2").attr("src", "pic/d" + oneString.charAt(2) + ".png");
             break;
         case 2:
-            $("#z1-0").attr("src", this.blankImage).css("display", "block");
-            $("#z1-1").attr("src", oneString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + oneString.charAt(0) + ".png").css("display", "block");
-            $("#z1-2").attr("src", "pic/d" + oneString.charAt(1) + ".png").css("display", "block");
+            $("#z1-0").attr("src", this.blankImage);
+            $("#z1-1").attr("src", oneString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + oneString.charAt(0) + ".png");
+            $("#z1-2").attr("src", "pic/d" + oneString.charAt(1) + ".png");
             break;
         case 1:
-            $("#z1-0").attr("src", this.blankImage).css("display", "block");
-            $("#z1-1").attr("src", this.blankImage).css("display", "block");
-            $("#z1-2").attr("src", oneString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + oneString.charAt(0) + ".png").css("display", "block");
+            $("#z1-0").attr("src", this.blankImage);
+            $("#z1-1").attr("src", this.blankImage);
+            $("#z1-2").attr("src", oneString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + oneString.charAt(0) + ".png");
             break;
     }
 };
@@ -70,19 +91,19 @@ Display.prototype.renderSecondSegment = function () {
 
     switch (twoString.length) {
         case 3:
-            $("#z2-0").attr("src", twoString.charAt(0) === "-" ? ("pic/minus_k.png") : this.blankImage).css("display", "block");
-            $("#z2-1").attr("src", "pic/d" + twoString.charAt(1) + ".png").css("display", "block");
-            $("#z2-2").attr("src", "pic/d" + twoString.charAt(2) + ".png").css("display", "block");
+            $("#z2-0").attr("src", twoString.charAt(0) === "-" ? ("pic/minus_k.png") : this.blankImage);
+            $("#z2-1").attr("src", "pic/d" + twoString.charAt(1) + ".png");
+            $("#z2-2").attr("src", "pic/d" + twoString.charAt(2) + ".png");
             break;
         case 2:
-            $("#z2-0").attr("src", this.blankImage).css("display", "block");
-            $("#z2-1").attr("src", twoString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + twoString.charAt(0) + ".png").css("display", "block");
-            $("#z2-2").attr("src", "pic/d" + twoString.charAt(1) + ".png").css("display", "block");
+            $("#z2-0").attr("src", this.blankImage);
+            $("#z2-1").attr("src", twoString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + twoString.charAt(0) + ".png");
+            $("#z2-2").attr("src", "pic/d" + twoString.charAt(1) + ".png");
             break;
         case 1:
-            $("#z2-0").attr("src", this.blankImage).css("display", "block");
-            $("#z2-1").attr("src", this.blankImage).css("display", "block");
-            $("#z2-2").attr("src", twoString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + twoString.charAt(0) + ".png").css("display", "block");
+            $("#z2-0").attr("src", this.blankImage);
+            $("#z2-1").attr("src", this.blankImage);
+            $("#z2-2").attr("src", twoString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + twoString.charAt(0) + ".png");
             break;
     }
 
@@ -102,28 +123,28 @@ Display.prototype.renderSolution = function() {
     switch (solutionString.length) {
 
         case 4:
-            $("#z3-0").attr("src", solutionString.charAt(0) === "-" ? "pic/minus_k.png" : this.blankImage).css("display", "block");
-            $("#z3-1").attr("src", "pic/d" + solutionString.charAt(1) + ".png").css("display", "block");
-            $("#z3-2").attr("src", "pic/d" + solutionString.charAt(2) + ".png").css("display", "block");
-            $("#z3-3").attr("src", "pic/d" + solutionString.charAt(3) + ".png").css("display", "block");
+            $("#z3-0").attr("src", solutionString.charAt(0) === "-" ? "pic/minus_k.png" : this.blankImage);
+            $("#z3-1").attr("src", "pic/d" + solutionString.charAt(1) + ".png");
+            $("#z3-2").attr("src", "pic/d" + solutionString.charAt(2) + ".png");
+            $("#z3-3").attr("src", "pic/d" + solutionString.charAt(3) + ".png");
             break;
         case 3:
-            $("#z3-0").attr("src", this.blankImage).css("display", "block");
-            $("#z3-1").attr("src", solutionString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + solutionString.charAt(0) + ".png").css("display", "block");
-            $("#z3-2").attr("src", "pic/d" + solutionString.charAt(1) + ".png").css("display", "block");
-            $("#z3-3").attr("src", "pic/d" + solutionString.charAt(2) + ".png").css("display", "block");
+            $("#z3-0").attr("src", this.blankImage);
+            $("#z3-1").attr("src", solutionString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + solutionString.charAt(0) + ".png");
+            $("#z3-2").attr("src", "pic/d" + solutionString.charAt(1) + ".png");
+            $("#z3-3").attr("src", "pic/d" + solutionString.charAt(2) + ".png");
             break;
         case 2:
-            $("#z3-0").attr("src", this.blankImage).css("display", "block");
-            $("#z3-1").attr("src", this.blankImage).css("display", "block");
-            $("#z3-2").attr("src", solutionString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + solutionString.charAt(0) + ".png").css("display", "block");
-            $("#z3-3").attr("src", "pic/d" + solutionString.charAt(1) + ".png").css("display", "block");
+            $("#z3-0").attr("src", this.blankImage);
+            $("#z3-1").attr("src", this.blankImage);
+            $("#z3-2").attr("src", solutionString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + solutionString.charAt(0) + ".png");
+            $("#z3-3").attr("src", "pic/d" + solutionString.charAt(1) + ".png");
             break;
         case 1:
-            $("#z3-0").attr("src", this.blankImage).css("display", "block");
-            $("#z3-1").attr("src", this.blankImage).css("display", "block");
-            $("#z3-2").attr("src", this.blankImage).css("display", "block");
-            $("#z3-3").attr("src", solutionString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + solutionString.charAt(0) + ".png").css("display", "block");
+            $("#z3-0").attr("src", this.blankImage);
+            $("#z3-1").attr("src", this.blankImage);
+            $("#z3-2").attr("src", this.blankImage);
+            $("#z3-3").attr("src", solutionString.charAt(0) === "-" ? "pic/minus_k.png" : "pic/d" + solutionString.charAt(0) + ".png");
             break;
     }
 };

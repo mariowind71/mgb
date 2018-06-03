@@ -19,24 +19,6 @@ Icc.prototype.init = function() {
     $("#percentage-wrong").css("height", "0");
     $("#bar-right-wrong").empty();
 
-    var blankImg = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
-    $('#z1-0').attr("src", blankImg);
-    $('#z1-1').attr("src", blankImg);
-    $('#z1-2').attr("src", "pic/d1.png");
-    $('#operator').attr("src", "pic/plus_k.png");
-    $('#klammer_auf').attr("src", "pic/klammerauf.png");
-    $('#z2-0').attr("src", blankImg);
-    $('#z2-1').attr("src", blankImg);
-    $('#z2-2').attr("src", "pic/d1.png");
-    $('#klammer_zu').attr("src", "pic/klammerzu.png");
-    $('#gl').attr("src", "pic/gl.png");
-    $('#z3-0').attr("src", blankImg);
-    $('#z3-1').attr("src", blankImg);
-    $('#z3-2').attr("src", blankImg);
-    $('#z3-3').attr("src", "pic/d2.png");
-
-    $("#klammer_auf").hide();
-    $("#klammer_zu").hide();
 };
 
 Icc.prototype.startRound = function() {
