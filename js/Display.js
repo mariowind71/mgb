@@ -108,9 +108,10 @@ Display.prototype.renderSecondSegment = function () {
     }
 
     var klammer = $("#klammer_auf,#klammer_zu");
-    klammer.css("width", "0px");
     if (twoString.startsWith("-")) {
         klammer.animate({width: '9px'}, "fast");
+    } else {
+        klammer.css("width", "0px");
     }
 };
 
