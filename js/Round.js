@@ -13,11 +13,16 @@ function Round(time, problemCount, plusminus, multiplydivide, natural) {
 Round.prototype.generateProblems = function () {
     for (var i = 0; i < this.problemCount; i++) {
 
-        var isPlusMinus = this.plusminus && this.getRandomInt(1,2) === 1;
-        if (isPlusMinus) {
+        if (this.plusminus && !this.multiplydivide) {
             this.problemList.push(this.getPlusminusProblem());
-        } else {
+        } else if (!this.plusminus && this.multiplydivide) {
             this.problemList.push(this.getMultiplyDivideProblem());
+        } else {
+            if (this.getRandomInt(1,2) === 1) {
+                this.problemList.push(this.getPlusminusProblem());
+            } else {
+                this.problemList.push(this.getMultiplyDivideProblem());
+            }
         }
 
     }
