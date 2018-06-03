@@ -101,7 +101,10 @@ Icc.prototype.solve = function () {
     var that = this;
 
     if (this.round.isOver()) {
-        this.showResults();
+        setTimeout(function () {
+            that.showResults();
+        }, this.round.getCurrentProblem().isCorrect() ? 1500 : 5000);
+
     } else {
         var pause = this.round.getCurrentProblem().isCorrect() ? 1500 : 5000;
         setTimeout(function () {
