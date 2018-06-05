@@ -1,0 +1,86 @@
+<html>
+    <head>
+        <title>Drag & Drop Change</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <style>
+            .box
+            {
+                width: 150px;
+                height: 200px;
+                border-style: solid;
+                border-width: 1px;
+                background-color: green;
+                margin: 20px;
+                padding: 0px;
+                float: left;
+                cursor: move;
+            }
+            .box header
+            {
+                background-color: royalblue;
+            }
+            .box:hover
+            {
+                border-style: dashed;
+            }
+            .schueler
+            {
+                height: 100px;
+                margin: 20px;
+                padding: 0px;
+                float: left;
+                cursor: move;
+            }
+        </style>
+        <script type="text/javascript">
+            var dragSrcEl = null;
+            
+            function dragStart(ev) 
+            {                   
+                dragSrcEl = ev.target;
+                ev.dataTransfer.effectAllowed='move';
+                ev.dataTransfer.setData('text/html', ev.target.innerHTML);
+                return true;
+            }       
+
+            function dragEnter(ev) 
+            {
+                ev.preventDefault();
+                return true;
+            }
+            
+            function dragOver(ev) 
+            {
+                return false;
+            }
+            
+            function dragDrop(ev) 
+            {
+                ev.stopPropagation();
+                dragSrcEl.innerHTML = ev.target.innerHTML;
+                ev.target.innerHTML = ev.dataTransfer.getData('text/html');
+                return false;
+            }
+            
+        </script>
+    </head>
+    <body>
+        <div align="center"><h1>Die HTML5 Drag & Drop API</h1></div>
+        <div class="box" draggable="true"
+             ondragstart="return dragStart(event)"
+             ondragenter="return dragEnter(event)" 
+             ondrop="return dragDrop(event)" 
+             ondragover="return dragOver(event)">
+            <header>Box A</header>
+			<img src="boy.png" height="100">
+        </div>
+        <div class="box" draggable="true"
+             ondragstart="return dragStart(event)"
+             ondragenter="return dragEnter(event)" 
+             ondrop="return dragDrop(event)" 
+             ondragover="return dragOver(event)">
+            <header>Box B</header>
+			<img src="girl.png" height="100">
+        </div>
+    </body>
+</html>
