@@ -1,0 +1,95 @@
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
+  <title>Mein Sitzplanator</title>
+  
+  
+ <style>
+ * { 
+  padding: 0; 
+  margin: 0; 
+} 
+ 
+body, html { 
+  width: 1000px; 
+  margin: 0 auto; 
+}
+	@font-face {
+		font-family: 'SG_0';
+		src: url('font/SG_0.ttf');
+	}
+
+	body {
+		font-family: 'SG_0'; font-size: 15px; font-weight: bold; color: white;			
+	}
+
+  .schueler {
+    position: relative; 
+	margin: 0px auto 0px auto;
+	height: 78px;
+	width: 78px;
+	border-radius: 8px;
+  }
+  .tisch {
+    float: left; position: relative; background: #8B4513 ; height:80px; width: 80px; border-radius: 10px; 
+	margin: 5px; padding: 10 px; font-size: 10px; box-shadow: 5px 5px 5px #222222; 
+  }
+  .tisch:active { 
+    transform: translateY(4px) translateX(4px);
+}  
+ </style>
+</head>
+<body style="margin-left: auto; margin-right: auto;">
+  <div style="background-image: url(img/tafel1000.jpg); width: 1000px; height: 609px;">
+    <div id="Schueler_links" style="float: left; position:relative;left:0px;top:60px;height: 510px;width: 90px;"></div>
+    <div id="Schueler_Mitte" style="float: left; position:relative;left:30px;top:65px;margin: 0px auto 0px auto;height: 470px;width: 765px;"></div>
+    <div id="Schueler_rechts" style="float: left; position:relative;left:55px;top:60px;margin: 0px auto 0px auto;height: 510px;width: 90px;"></div>
+    <div id="Lehrer" onclick="Schueler_setzen(SchuelerTabelle)" class="Lehrer" style="position: relative; top: -85px; left: 860px;"><img src="img/lehrer.png" height="150"></div>
+
+	  <div style="position: relative; top: -100px;left:100px;width:400px;">
+		<form class="form-horizontal well">
+			  <label for="csvFileInput"> <strong>CSV-Datei:</strong> </label>
+			  <input type="file" id="csvFileInput" onchange="handleFiles(this.files)" accept=".csv">
+		</form>
+	  </div>
+	</div>
+
+	 <div id="c" style="position:relative;left:55px;top:60px;margin: 0px auto 0px auto;height: 510px;width: 700px;"> </div>
+
+
+	<br>
+  <br>
+
+    <div id="output" style="position: relative; top: -1080px;left:100px;background-color: #FFFFFF;width: 360px">
+    </div>
+<!--
+  <br>
+  <br>
+  <footer>
+    <center>
+      <p>Sitzplanator</p>
+    </center>
+  </footer>
+       
+  <!-- Le javascript						<script type="text/javascript" src="js/tische.js"></script>		
+    ================================================== -->
+	
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script type="text/javascript" src="js/read-csv.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="js/fabric.min.js"></script>
+<script>
+ 
+
+//$("schueler").click(function() {
+//	var target = event.target || event.srcElement;
+//	var id = target.id;
+    //var contentPanelId = jQuery(this).attr("id");
+    //alert(contentPanelId);
+//    alert(id);
+//});
+</script>
+  
+</body>
+</html>
