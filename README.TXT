@@ -1,3 +1,5 @@
+MIG - My interactive greenboard
+
 Pläne:
 Whiteboard mit folgenden Funktionen:
  - beschreibbar (Maus)
